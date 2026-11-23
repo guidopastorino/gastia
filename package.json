@@ -1,0 +1,6 @@
+{
+  "name": "gastia",
+  "private": true,
+  "packageManager": "pnpm@11.21.0",
+  "scripts": {}
+}
