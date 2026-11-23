@@ -2,5 +2,12 @@
   "name": "gastia",
   "private": true,
   "packageManager": "pnpm@11.21.0",
-  "scripts": {}
+  "scripts": {
+    "setup": "pnpm install",
+    "mobile": "pnpm --filter mobile start",
+    "mobile:ios": "pnpm --filter mobile ios",
+    "mobile:android": "pnpm --filter mobile android",
+    "mobile:web": "pnpm --filter mobile web",
+    "mobile:typecheck": "pnpm --filter mobile exec tsc --noEmit"
+  }
 }
