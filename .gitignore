@@ -8,3 +8,4 @@ node_modules/
 # Local tooling
 .claude/
 .local/
+.cursor/
