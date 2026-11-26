@@ -8,6 +8,9 @@
     "mobile:ios": "pnpm --filter mobile ios",
     "mobile:android": "pnpm --filter mobile android",
     "mobile:web": "pnpm --filter mobile web",
-    "mobile:typecheck": "pnpm --filter mobile exec tsc --noEmit"
+    "mobile:typecheck": "pnpm --filter mobile exec tsc --noEmit",
+    "api:build": "pnpm --filter api build",
+    "api:typecheck": "pnpm --filter api typecheck",
+    "api:deploy": "pnpm --filter api run deploy"
   }
 }
