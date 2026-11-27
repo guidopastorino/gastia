@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -11,10 +11,14 @@ import {
 } from 'react-native';
 
 import { supabase } from '../lib/supabase';
+import type { Colors } from '../theme/colors';
+import { useTheme } from '../theme/ThemeProvider';
 
 type Mode = 'signIn' | 'signUp';
 
 export function AuthScreen() {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [mode, setMode] = useState<Mode>('signIn');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -54,6 +58,7 @@ export function AuthScreen() {
         <TextInput
           style={styles.input}
           placeholder="Email"
+          placeholderTextColor={colors.textTertiary}
           autoCapitalize="none"
           autoComplete="email"
           keyboardType="email-address"
@@ -64,6 +69,7 @@ export function AuthScreen() {
         <TextInput
           style={styles.input}
           placeholder="Contraseña (mínimo 6 caracteres)"
+          placeholderTextColor={colors.textTertiary}
           secureTextEntry
           autoComplete={isSignIn ? 'current-password' : 'new-password'}
           textContentType={isSignIn ? 'password' : 'newPassword'}
@@ -80,7 +86,7 @@ export function AuthScreen() {
           disabled={!canSubmit}
         >
           {loading ? (
-            <ActivityIndicator color="#fff" />
+            <ActivityIndicator color={colors.onPrimary} />
           ) : (
             <Text style={styles.buttonText}>{isSignIn ? 'Entrar' : 'Registrarme'}</Text>
           )}
@@ -96,27 +102,31 @@ export function AuthScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff', justifyContent: 'center', padding: 24 },
-  form: { gap: 12 },
-  title: { fontSize: 26, fontWeight: '700', marginBottom: 8 },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: 16,
-  },
-  error: { color: '#cf222e' },
-  button: {
-    backgroundColor: '#111',
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-    marginTop: 4,
-  },
-  buttonDisabled: { opacity: 0.4 },
-  buttonText: { color: '#fff', fontWeight: '600', fontSize: 16 },
-  link: { textAlign: 'center', color: '#0969da', marginTop: 8 },
-});
+function createStyles(colors: Colors) {
+  return StyleSheet.create({
+    container: { flex: 1, backgroundColor: colors.background, justifyContent: 'center', padding: 24 },
+    form: { gap: 12 },
+    title: { fontSize: 26, fontWeight: '700', marginBottom: 8, color: colors.text },
+    input: {
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 8,
+      paddingHorizontal: 14,
+      paddingVertical: 12,
+      fontSize: 16,
+      color: colors.text,
+      backgroundColor: colors.card,
+    },
+    error: { color: colors.danger },
+    button: {
+      backgroundColor: colors.primary,
+      borderRadius: 8,
+      paddingVertical: 14,
+      alignItems: 'center',
+      marginTop: 4,
+    },
+    buttonDisabled: { opacity: 0.4 },
+    buttonText: { color: colors.onPrimary, fontWeight: '600', fontSize: 16 },
+    link: { textAlign: 'center', color: colors.link, marginTop: 8 },
+  });
+}
