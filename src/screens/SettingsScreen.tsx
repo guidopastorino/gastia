@@ -47,7 +47,11 @@ export function SettingsScreen() {
 
   return (
     <StylesContext.Provider value={{ styles, colors }}>
-      <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
+      <ScrollView
+        style={styles.screen}
+        contentContainerStyle={styles.content}
+        contentInsetAdjustmentBehavior="automatic"
+      >
         <Pressable
           style={({ pressed }) => [styles.profile, pressed && styles.pressed]}
           onPress={comingSoon('Perfil')}

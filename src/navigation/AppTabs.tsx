@@ -75,6 +75,13 @@ export function AppTabs() {
     <Tab.Navigator
       screenOptions={{
         headerShown: true,
+        // iOS: large title that collapses on scroll, over the screen background.
+        headerLargeTitleEnabled: true,
+        headerTransparent: Platform.OS === 'ios',
+        headerShadowVisible: false,
+        headerLargeTitleShadowVisible: false,
+        headerTintColor: colors.text,
+        headerStyle: Platform.OS === 'ios' ? undefined : { backgroundColor: colors.card },
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textTertiary,
       }}
