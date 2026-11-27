@@ -19,7 +19,7 @@ export function FlowChartCard({ stats }: Props) {
         <View style={styles.titles}>
           <AppText variant="heading">{stats.flowTitle}</AppText>
           <AppText variant="caption" tone="secondary">
-            Toca o desliza para ver cada punto
+            Toca el gráfico para ver detalles
           </AppText>
         </View>
         <View style={styles.legend}>

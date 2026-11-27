@@ -21,7 +21,7 @@ type Props = {
 const PAD = { top: 44, bottom: 8, x: 6 };
 const GRID_LINES = 3;
 const LABEL_WIDTH = 56;
-const TOOLTIP_WIDTH = 116;
+const TOOLTIP_WIDTH = 128;
 
 /** Interactive line chart: touch or drag to inspect a point. */
 export function LineChart({ data, height = 200, average, initialIndex, formatValue = String }: Props) {
@@ -128,7 +128,7 @@ export function LineChart({ data, height = 200, average, initialIndex, formatVal
             style={[styles.tooltip, { left: tooltipLeft, backgroundColor: colors.primary }]}
           >
             <AppText variant="smallStrong" tone="inverse" numberOfLines={1}>
-              {formatValue(activeData.value)}
+              {activeData.label ? `${activeData.label} · ${formatValue(activeData.value)}` : formatValue(activeData.value)}
             </AppText>
           </View>
         )}

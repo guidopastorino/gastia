@@ -33,6 +33,7 @@ export function ProfileScreen() {
         <Chip
           label={verified ? 'Email verificado' : 'Email sin verificar'}
           icon={verified ? 'checkmark-circle' : 'alert-circle-outline'}
+          style={styles.chip}
         />
       </View>
 
@@ -66,4 +67,5 @@ export function ProfileScreen() {
 const useStyles = makeStyles(() => ({
   hero: { alignItems: 'center', gap: 14, paddingTop: 8 },
   heroText: { alignItems: 'center', gap: 4 },
+  chip: { alignSelf: 'center' },
 }));
