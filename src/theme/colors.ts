@@ -7,6 +7,7 @@ export type Colors = {
   text: string;
   textSecondary: string;
   textTertiary: string;
+  icon: string;
   border: string;
   separator: string;
   pressed: string;
@@ -26,6 +27,7 @@ export const palettes: Record<ColorScheme, Colors> = {
     text: '#000000',
     textSecondary: '#6d6d72',
     textTertiary: '#8e8e93',
+    icon: '#3a3a3c',
     border: '#dddddd',
     separator: '#c6c6c8',
     pressed: '#e5e5ea',
@@ -43,6 +45,7 @@ export const palettes: Record<ColorScheme, Colors> = {
     text: '#ffffff',
     textSecondary: '#8e8e93',
     textTertiary: '#8e8e93',
+    icon: '#f2f2f7',
     border: '#38383a',
     separator: '#38383a',
     pressed: '#2c2c2e',

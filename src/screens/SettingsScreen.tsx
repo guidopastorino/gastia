@@ -71,32 +71,32 @@ export function SettingsScreen() {
         </Pressable>
 
         <Section title="Cuenta">
-          <Row icon="person-outline" color="#0a84ff" label="Editar perfil" onPress={comingSoon('Editar perfil')} />
-          <Row icon="key-outline" color="#8e8e93" label="Cambiar contraseña" onPress={comingSoon('Cambiar contraseña')} />
-          <Row icon="star-outline" color="#ff9f0a" label="Plan" value="Gratis" onPress={comingSoon('Plan')} />
+          <Row icon="person-outline" label="Editar perfil" onPress={comingSoon('Editar perfil')} />
+          <Row icon="key-outline" label="Cambiar contraseña" onPress={comingSoon('Cambiar contraseña')} />
+          <Row icon="star-outline" label="Plan" value="Gratis" onPress={comingSoon('Plan')} />
         </Section>
 
         <Section title="Preferencias">
-          <Row icon="contrast-outline" color="#8e8e93" label="Tema">
+          <Row icon="contrast-outline" label="Tema">
             <SegmentedControl options={THEME_OPTIONS} value={preference} onChange={setPreference} />
           </Row>
-          <Row icon="cash-outline" color="#30d158" label="Moneda" value="USD" onPress={comingSoon('Moneda')} />
-          <Row icon="globe-outline" color="#5e5ce6" label="Idioma" value="Español" onPress={comingSoon('Idioma')} />
+          <Row icon="cash-outline" label="Moneda" value="USD" onPress={comingSoon('Moneda')} />
+          <Row icon="globe-outline" label="Idioma" value="Español" onPress={comingSoon('Idioma')} />
         </Section>
 
         <Section title="Notificaciones" footer="Te avisamos cuando te acercás a tu presupuesto.">
-          <Row icon="notifications-outline" color="#ff375f" label="Notificaciones push">
+          <Row icon="notifications-outline" label="Notificaciones push">
             <Switch value={notifications} onValueChange={setNotifications} />
           </Row>
-          <Row icon="calendar-outline" color="#ff9f0a" label="Resumen mensual">
+          <Row icon="calendar-outline" label="Resumen mensual">
             <Switch value={monthlySummary} onValueChange={setMonthlySummary} />
           </Row>
         </Section>
 
         <Section title="Soporte">
-          <Row icon="help-circle-outline" color="#0a84ff" label="Ayuda" onPress={comingSoon('Ayuda')} />
-          <Row icon="document-text-outline" color="#8e8e93" label="Términos y condiciones" onPress={comingSoon('Términos')} />
-          <Row icon="shield-checkmark-outline" color="#30d158" label="Privacidad" onPress={comingSoon('Privacidad')} />
+          <Row icon="help-circle-outline" label="Ayuda" onPress={comingSoon('Ayuda')} />
+          <Row icon="document-text-outline" label="Términos y condiciones" onPress={comingSoon('Términos')} />
+          <Row icon="shield-checkmark-outline" label="Privacidad" onPress={comingSoon('Privacidad')} />
         </Section>
 
         <Section>
@@ -137,14 +137,13 @@ function Section({ title, footer, children }: { title?: string; footer?: string;
 
 type RowProps = {
   icon: IconName;
-  color: string;
   label: string;
   value?: string;
   onPress?: () => void;
   children?: ReactNode;
 };
 
-function Row({ icon, color, label, value, onPress, children }: RowProps) {
+function Row({ icon, label, value, onPress, children }: RowProps) {
   const { styles, colors } = useStyles();
   return (
     <Pressable
@@ -152,7 +151,7 @@ function Row({ icon, color, label, value, onPress, children }: RowProps) {
       onPress={onPress}
       disabled={!onPress}
     >
-      <Ionicons name={icon} size={ICON_SIZE} color={color} style={styles.icon} />
+      <Ionicons name={icon} size={ICON_SIZE} color={colors.icon} style={styles.icon} />
       <Text style={styles.rowLabel} numberOfLines={1}>
         {label}
       </Text>
