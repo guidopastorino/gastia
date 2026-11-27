@@ -1,9 +1,11 @@
 export type ColorScheme = 'light' | 'dark';
 
 export type Colors = {
+  /** Page background behind cards. */
   background: string;
-  groupedBackground: string;
   card: string;
+  /** Muted fill for inputs, chips, icon circles and secondary buttons. */
+  surface: string;
   text: string;
   textSecondary: string;
   textTertiary: string;
@@ -15,45 +17,45 @@ export type Colors = {
   onPrimary: string;
   link: string;
   danger: string;
+  success: string;
   segmentBackground: string;
-  segmentSelected: string;
 };
 
 export const palettes: Record<ColorScheme, Colors> = {
   light: {
-    background: '#ffffff',
-    groupedBackground: '#f2f2f7',
+    background: '#f6f6f7',
     card: '#ffffff',
-    text: '#000000',
-    textSecondary: '#6d6d72',
-    textTertiary: '#8e8e93',
-    icon: '#3a3a3c',
-    border: '#dddddd',
-    separator: '#c6c6c8',
-    pressed: '#e5e5ea',
-    primary: '#111111',
+    surface: '#f1f1f3',
+    text: '#0a0a0b',
+    textSecondary: '#6b6b73',
+    textTertiary: '#a0a0a8',
+    icon: '#18181b',
+    border: '#e4e4e7',
+    separator: '#f0f0f2',
+    pressed: '#f1f1f3',
+    primary: '#0a0a0b',
     onPrimary: '#ffffff',
-    link: '#0969da',
-    danger: '#ff3b30',
-    segmentBackground: '#e9e9eb',
-    segmentSelected: '#ffffff',
+    link: '#0a0a0b',
+    danger: '#dc2626',
+    success: '#16a34a',
+    segmentBackground: '#ececef',
   },
   dark: {
-    background: '#000000',
-    groupedBackground: '#000000',
-    card: '#1c1c1e',
-    text: '#ffffff',
-    textSecondary: '#8e8e93',
-    textTertiary: '#8e8e93',
-    icon: '#f2f2f7',
-    border: '#38383a',
-    separator: '#38383a',
-    pressed: '#2c2c2e',
-    primary: '#ffffff',
-    onPrimary: '#000000',
-    link: '#0a84ff',
-    danger: '#ff453a',
-    segmentBackground: '#2c2c2e',
-    segmentSelected: '#636366',
+    background: '#09090b',
+    card: '#161618',
+    surface: '#202024',
+    text: '#fafafa',
+    textSecondary: '#a1a1aa',
+    textTertiary: '#6b6b73',
+    icon: '#e4e4e7',
+    border: '#2a2a2f',
+    separator: '#222226',
+    pressed: '#202024',
+    primary: '#fafafa',
+    onPrimary: '#0a0a0b',
+    link: '#fafafa',
+    danger: '#f87171',
+    success: '#4ade80',
+    segmentBackground: '#202024',
   },
 };
