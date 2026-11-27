@@ -15,20 +15,28 @@ type Mode = 'signIn' | 'signUp';
 
 const comingSoon = (title: string) => () => Alert.alert(title, 'Próximamente.');
 
+/** Trims and collapses inner whitespace: "  ana   pérez " -> "ana pérez". */
+function normalizeName(name: string) {
+  return name.trim().replace(/\s+/g, ' ');
+}
+
 export function AuthScreen() {
   const styles = useStyles();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
+  const emailRef = useRef<TextInputInstance>(null);
   const passwordRef = useRef<TextInputInstance>(null);
 
   const [mode, setMode] = useState<Mode>('signIn');
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const isSignIn = mode === 'signIn';
-  const canSubmit = email.trim().length > 0 && password.length >= 6 && !loading;
+  const nameValid = isSignIn || normalizeName(fullName).length >= 2;
+  const canSubmit = nameValid && email.trim().length > 0 && password.length >= 6 && !loading;
 
   async function handleSubmit() {
     if (!canSubmit) return;
@@ -37,9 +45,13 @@ export function AuthScreen() {
 
     const credentials = { email: email.trim(), password };
     // On success the session listener in AuthProvider switches to the tabs.
+    // The name is stored in the auth user's metadata (read by lib/user getDisplayName).
     const { error } = isSignIn
       ? await supabase.auth.signInWithPassword(credentials)
-      : await supabase.auth.signUp(credentials);
+      : await supabase.auth.signUp({
+          ...credentials,
+          options: { data: { full_name: normalizeName(fullName) } },
+        });
 
     if (error) setError(error.message);
     setLoading(false);
@@ -71,7 +83,22 @@ export function AuthScreen() {
       </View>
 
       <View style={styles.form}>
+        {!isSignIn && (
+          <AuthField
+            label="Nombre completo"
+            icon="person-outline"
+            placeholder="Tu nombre y apellido"
+            autoCapitalize="words"
+            autoComplete="name"
+            textContentType="name"
+            returnKeyType="next"
+            value={fullName}
+            onChangeText={setFullName}
+            onSubmitEditing={() => emailRef.current?.focus()}
+          />
+        )}
         <AuthField
+          ref={emailRef}
           label="Email"
           icon="mail-outline"
           placeholder="correo@ejemplo.com"
