@@ -1,4 +1,3 @@
-import { Fragment } from 'react';
 import { Alert, View } from 'react-native';
 
 import { Card, SectionHeader } from '../../../components/ui';
@@ -16,25 +15,19 @@ export function RecentTransactions({ transactions }: Props) {
   return (
     <View style={styles.container}>
       <SectionHeader
-        title="Transacciones Recientes"
-        variant="heading"
-        count={transactions.length}
-        action={{ label: 'Ver todas', onPress: () => Alert.alert('Transacciones', 'Próximamente.') }}
+        title="Movimientos recientes"
+        action={{ label: 'Ver todo', onPress: () => Alert.alert('Movimientos', 'Próximamente.') }}
       />
       <Card style={styles.card}>
-        {transactions.map((t, i) => (
-          <Fragment key={t.id}>
-            {i > 0 && <View style={styles.separator} />}
-            <TransactionRow transaction={t} />
-          </Fragment>
+        {transactions.map((t) => (
+          <TransactionRow key={t.id} transaction={t} />
         ))}
       </Card>
     </View>
   );
 }
 
-const useStyles = makeStyles((c) => ({
-  container: { gap: 10 },
-  card: { paddingVertical: 6 },
-  separator: { height: 1, backgroundColor: c.separator, marginLeft: 58 },
+const useStyles = makeStyles(() => ({
+  container: { gap: 12 },
+  card: { paddingVertical: 8 },
 }));

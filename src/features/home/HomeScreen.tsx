@@ -3,17 +3,27 @@ import { Alert, View } from 'react-native';
 
 import { useAuth } from '../../auth/AuthProvider';
 import { Sparkline } from '../../components/charts/Sparkline';
-import { TabScreen } from '../../components/layout/TabScreen';
-import { AppText, ProgressBar } from '../../components/ui';
+import { Screen } from '../../components/layout/Screen';
+import { ProgressBar } from '../../components/ui';
+import { greetingForHour } from '../../lib/date';
 import { formatMoney, formatPercent } from '../../lib/format';
 import { getFirstName } from '../../lib/user';
 import { makeStyles } from '../../theme/makeStyles';
-import { BalanceCard } from './components/BalanceCard';
-import { HomeGreeting } from './components/HomeGreeting';
+import { BalanceHero } from './components/BalanceHero';
+import { QuickActions, type QuickAction } from './components/QuickActions';
 import { RecentTransactions } from './components/RecentTransactions';
 import { RecommendationCard } from './components/RecommendationCard';
 import { StatCard } from './components/StatCard';
 import { balance, expenses, income, recentTransactions, recommendation } from './mock';
+
+const comingSoon = (title: string) => () => Alert.alert(title, 'Próximamente.');
+
+const ACTIONS: QuickAction[] = [
+  { id: 'add', label: 'Ingresar', icon: 'add', primary: true, onPress: comingSoon('Ingresar') },
+  { id: 'transfer', label: 'Transferir', icon: 'swap-horizontal', onPress: comingSoon('Transferir') },
+  { id: 'analyze', label: 'Analizar', icon: 'sparkles-outline', onPress: comingSoon('Analizar con IA') },
+  { id: 'more', label: 'Más', icon: 'ellipsis-horizontal', onPress: comingSoon('Más acciones') },
+];
 
 export function HomeScreen() {
   const styles = useStyles();
@@ -22,15 +32,15 @@ export function HomeScreen() {
   const spentShare = expenses.amount / expenses.limit;
 
   return (
-    <TabScreen title="Inicio">
-      <HomeGreeting firstName={getFirstName(session?.user)} />
+    <Screen>
+      <BalanceHero greeting={`${greetingForHour()}, ${getFirstName(session?.user)}`} {...balance} />
 
-      <BalanceCard {...balance} />
+      <QuickActions actions={ACTIONS} />
 
       {showRecommendation && (
         <RecommendationCard
           {...recommendation}
-          onApply={() => Alert.alert('Sugerencia aplicada', 'Próximamente.')}
+          onApply={comingSoon('Sugerencia')}
           onDismiss={() => setShowRecommendation(false)}
         />
       )}
@@ -38,32 +48,25 @@ export function HomeScreen() {
       <View style={styles.stats}>
         <StatCard
           label="Ingresos"
-          badge={<View style={styles.dot} />}
-          value={formatMoney(income.amount)}
-          footer={`${formatPercent(income.changePct)} vs prev.`}
+          value={formatMoney(income.amount, { decimals: 0 })}
+          footer={`${formatPercent(income.changePct)} vs. mes anterior`}
         >
           <Sparkline data={income.trend} />
         </StatCard>
         <StatCard
-          label="Gastos mes"
-          badge={
-            <AppText variant="caption" tone="secondary">
-              {Math.round(spentShare * 100)}%
-            </AppText>
-          }
-          value={formatMoney(expenses.amount)}
-          footer={`Límite: ${formatMoney(expenses.limit)}`}
+          label="Gastos del mes"
+          value={formatMoney(expenses.amount, { decimals: 0 })}
+          footer={`${Math.round(spentShare * 100)}% de ${formatMoney(expenses.limit, { decimals: 0 })}`}
         >
-          <ProgressBar value={spentShare} />
+          <ProgressBar value={spentShare} height={6} />
         </StatCard>
       </View>
 
       <RecentTransactions transactions={recentTransactions} />
-    </TabScreen>
+    </Screen>
   );
 }
 
-const useStyles = makeStyles((c) => ({
+const useStyles = makeStyles(() => ({
   stats: { flexDirection: 'row', gap: 12 },
-  dot: { width: 8, height: 8, borderRadius: 4, backgroundColor: c.text },
 }));

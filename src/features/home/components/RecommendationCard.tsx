@@ -1,48 +1,44 @@
-import { View } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { Pressable, View } from 'react-native';
 
-import { AppText, Button, Card, IconCircle } from '../../../components/ui';
+import { AppText, Card } from '../../../components/ui';
 import { makeStyles } from '../../../theme/makeStyles';
+import { useTheme } from '../../../theme/ThemeProvider';
 
 type Props = {
   title: string;
-  when: string;
   text: string;
   onApply: () => void;
   onDismiss: () => void;
 };
 
-export function RecommendationCard({ title, when, text, onApply, onDismiss }: Props) {
+export function RecommendationCard({ title, text, onApply, onDismiss }: Props) {
   const styles = useStyles();
+  const { colors } = useTheme();
 
   return (
     <Card style={styles.card}>
-      <View style={styles.row}>
-        <IconCircle icon="sparkles-outline" size={40} shape="rounded" />
-        <View style={styles.body}>
-          <View style={styles.header}>
-            <AppText variant="overline" tone="secondary" style={styles.flex} numberOfLines={1}>
-              {title}
-            </AppText>
-            <AppText variant="caption" tone="secondary">
-              {when}
-            </AppText>
-          </View>
-          <AppText>{text}</AppText>
-        </View>
+      <View style={styles.header}>
+        <Ionicons name="sparkles" size={16} color={colors.text} />
+        <AppText variant="smallStrong" style={styles.title}>
+          {title}
+        </AppText>
+        <Pressable onPress={onDismiss} hitSlop={10} accessibilityRole="button" accessibilityLabel="Descartar">
+          <Ionicons name="close" size={18} color={colors.textTertiary} />
+        </Pressable>
       </View>
-      <View style={styles.actions}>
-        <Button title="Aplicar sugerencia" icon="arrow-forward" iconPosition="right" size="sm" onPress={onApply} />
-        <Button title="Descartar" variant="ghost" size="sm" onPress={onDismiss} />
-      </View>
+      <AppText tone="secondary">{text}</AppText>
+      <Pressable onPress={onApply} hitSlop={8} style={styles.apply} accessibilityRole="button">
+        <AppText variant="smallStrong">Aplicar sugerencia</AppText>
+        <Ionicons name="arrow-forward" size={15} color={colors.text} />
+      </Pressable>
     </Card>
   );
 }
 
 const useStyles = makeStyles(() => ({
-  card: { gap: 16 },
-  row: { flexDirection: 'row', gap: 12 },
-  body: { flex: 1, gap: 6 },
+  card: { gap: 10 },
   header: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  flex: { flex: 1 },
-  actions: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  title: { flex: 1 },
+  apply: { flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start', marginTop: 4 },
 }));

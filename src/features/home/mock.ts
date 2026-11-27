@@ -10,9 +10,8 @@ export const balance = {
 };
 
 export const recommendation = {
-  title: 'Recomendación algorítmica',
-  when: 'Hoy',
-  text: 'Has gastado un 18% menos en suscripciones esta semana. Puedes destinar $140 extra a tu meta de Inversión Automática.',
+  title: 'Sugerencia de hoy',
+  text: 'Gastaste un 18% menos en suscripciones esta semana. Puedes destinar $140 extra a tu meta de inversión.',
 };
 
 export const income = {
