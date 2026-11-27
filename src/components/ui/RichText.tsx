@@ -1,5 +1,6 @@
 import { Text } from 'react-native';
 
+import { fonts } from '../../theme/typography';
 import { AppText, type TextTone, type TextVariant } from './AppText';
 
 type Props = {
@@ -16,7 +17,7 @@ export function RichText({ children, variant = 'body', tone }: Props) {
     <AppText variant={variant} tone={tone}>
       {parts.map((part, i) =>
         part.startsWith('**') && part.endsWith('**') ? (
-          <Text key={i} style={{ fontWeight: '700' }}>
+          <Text key={i} style={{ fontFamily: fonts.semibold }}>
             {part.slice(2, -2)}
           </Text>
         ) : (

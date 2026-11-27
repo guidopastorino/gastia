@@ -6,12 +6,15 @@ import {
 import { useEffect, useState } from 'react';
 import { Platform, type ImageSourcePropType } from 'react-native';
 
+import { HeaderAvatar } from '../components/layout/HeaderAvatar';
 import type { IconName } from '../components/ui';
 import { AssistantScreen } from '../features/assistant/AssistantScreen';
 import { HomeScreen } from '../features/home/HomeScreen';
 import { SettingsScreen } from '../features/settings/SettingsScreen';
 import { StatsScreen } from '../features/stats/StatsScreen';
 import { useTheme } from '../theme/ThemeProvider';
+import { fonts } from '../theme/typography';
+import { nativeHeaderOptions } from './headerOptions';
 import type { AppTabsParamList } from './types';
 
 type TabName = keyof AppTabsParamList;
@@ -70,8 +73,9 @@ export function AppTabs() {
   return (
     <Tab.Navigator
       screenOptions={{
-        // Screens render their own AppHeader (logo, title, actions).
-        headerShown: false,
+        ...nativeHeaderOptions(colors),
+        headerRight: () => <HeaderAvatar />,
+        tabBarLabelStyle: { fontFamily: fonts.medium },
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textTertiary,
       }}

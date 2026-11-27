@@ -11,6 +11,7 @@ import {
 import type { Colors } from '../../theme/colors';
 import { useTheme } from '../../theme/ThemeProvider';
 import { radius } from '../../theme/tokens';
+import { fonts } from '../../theme/typography';
 import type { IconName } from './types';
 
 type Variant = 'primary' | 'secondary' | 'outline' | 'ghost';
@@ -29,9 +30,9 @@ type Props = {
 };
 
 const SIZES: Record<Size, { height: number; fontSize: number; icon: number; paddingX: number }> = {
-  sm: { height: 44, fontSize: 14, icon: 17, paddingX: 12 },
-  md: { height: 50, fontSize: 16, icon: 19, paddingX: 18 },
-  lg: { height: 58, fontSize: 18, icon: 22, paddingX: 22 },
+  sm: { height: 40, fontSize: 14, icon: 16, paddingX: 16 },
+  md: { height: 48, fontSize: 15, icon: 18, paddingX: 20 },
+  lg: { height: 54, fontSize: 16, icon: 19, paddingX: 24 },
 };
 
 function variantColors(variant: Variant, c: Colors) {
@@ -41,7 +42,7 @@ function variantColors(variant: Variant, c: Colors) {
     case 'secondary':
       return { bg: c.surface, fg: c.text, border: c.surface };
     case 'outline':
-      return { bg: c.card, fg: c.text, border: c.border };
+      return { bg: 'transparent', fg: c.text, border: c.border };
     case 'ghost':
       return { bg: 'transparent', fg: c.textSecondary, border: 'transparent' };
   }
@@ -71,7 +72,7 @@ export function Button({
       style={({ pressed }) => [
         styles.base,
         { height: s.height, paddingHorizontal: s.paddingX, backgroundColor: bg, borderColor: border },
-        (pressed || disabled) && { opacity: disabled ? 0.4 : 0.8 },
+        (pressed || disabled) && { opacity: disabled ? 0.35 : 0.75 },
         style,
       ]}
     >
@@ -96,8 +97,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    borderRadius: radius.md,
+    borderRadius: radius.pill,
     borderWidth: 1,
   },
-  label: { fontWeight: '600' },
+  label: { fontFamily: fonts.medium, letterSpacing: -0.1 },
 });

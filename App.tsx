@@ -1,3 +1,4 @@
+import { useFonts } from 'expo-font';
 import { DarkTheme, DefaultTheme, NavigationContainer, type Theme } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { useMemo } from 'react';
@@ -5,11 +6,17 @@ import { ActivityIndicator, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AuthProvider, useAuth } from './src/auth/AuthProvider';
-import { AppTabs } from './src/navigation/AppTabs';
 import { AuthScreen } from './src/features/auth/AuthScreen';
+import { RootNavigator } from './src/navigation/RootNavigator';
 import { ThemeProvider, useTheme } from './src/theme/ThemeProvider';
+import { fontAssets, fonts } from './src/theme/typography';
 
 export default function App() {
+  const [fontsLoaded] = useFonts(fontAssets);
+
+  // Render nothing until fonts are ready so text never flashes in the system font.
+  if (!fontsLoaded) return null;
+
   return (
     <SafeAreaProvider>
       <ThemeProvider>
@@ -33,9 +40,15 @@ function Root() {
         ...base.colors,
         primary: colors.primary,
         background: colors.background,
-        card: colors.card,
+        card: colors.background,
         text: colors.text,
         border: colors.separator,
+      },
+      fonts: {
+        regular: { fontFamily: fonts.regular, fontWeight: '400' },
+        medium: { fontFamily: fonts.medium, fontWeight: '500' },
+        bold: { fontFamily: fonts.semibold, fontWeight: '600' },
+        heavy: { fontFamily: fonts.bold, fontWeight: '700' },
       },
     };
   }, [scheme, colors]);
@@ -52,7 +65,7 @@ function Root() {
   } else {
     content = (
       <NavigationContainer theme={navigationTheme}>
-        <AppTabs />
+        <RootNavigator />
       </NavigationContainer>
     );
   }

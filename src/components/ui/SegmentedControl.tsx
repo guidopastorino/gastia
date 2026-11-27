@@ -2,6 +2,7 @@ import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } fro
 
 import { useTheme } from '../../theme/ThemeProvider';
 import { radius } from '../../theme/tokens';
+import { fonts } from '../../theme/typography';
 
 type Option<T extends string> = { value: T; label: string };
 
@@ -34,7 +35,7 @@ export function SegmentedControl<T extends string>({ options, value, onChange, s
               style={[
                 styles.label,
                 { color: selected ? colors.onPrimary : colors.textSecondary },
-                selected && styles.labelSelected,
+                selected && { fontFamily: fonts.semibold },
               ]}
               numberOfLines={1}
             >
@@ -48,14 +49,13 @@ export function SegmentedControl<T extends string>({ options, value, onChange, s
 }
 
 const styles = StyleSheet.create({
-  container: { flexDirection: 'row', borderRadius: radius.md, padding: 4 },
+  container: { flexDirection: 'row', borderRadius: radius.pill, padding: 4 },
   segment: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 9,
-    borderRadius: radius.sm,
+    borderRadius: radius.pill,
   },
-  label: { fontSize: 15, fontWeight: '500' },
-  labelSelected: { fontWeight: '700' },
+  label: { fontFamily: fonts.medium, fontSize: 14 },
 });

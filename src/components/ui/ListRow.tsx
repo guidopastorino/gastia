@@ -2,29 +2,37 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import type { ReactNode } from 'react';
 import { Pressable, Switch, View } from 'react-native';
 
-import { AppText, Chip, IconCircle, type IconName } from '../../../components/ui';
-import { makeStyles } from '../../../theme/makeStyles';
-import { useTheme } from '../../../theme/ThemeProvider';
+import { makeStyles } from '../../theme/makeStyles';
+import { useTheme } from '../../theme/ThemeProvider';
+import { AppText } from './AppText';
+import { Chip } from './Chip';
+import { IconCircle } from './IconCircle';
+import type { IconName } from './types';
 
 type Props = {
   title: string;
   subtitle?: string;
   icon?: IconName;
-  /** Bold value at the right, e.g. "USD ($)". */
+  /** Text at the right, e.g. "USD". */
   value?: string;
   /** Pill at the right, e.g. "3 bancos". */
   badge?: string;
   /** Renders a switch instead of a chevron. */
   toggle?: { value: boolean; onChange: (value: boolean) => void };
-  /** Custom right-side element (button...). */
+  /** Custom right-side element. */
   accessory?: ReactNode;
+  destructive?: boolean;
   onPress?: () => void;
 };
 
-export function SettingsRow({ title, subtitle, icon, value, badge, toggle, accessory, onPress }: Props) {
+export const LIST_ROW_ICON_SIZE = 36;
+export const LIST_ROW_PADDING = 18;
+export const LIST_ROW_GAP = 14;
+
+export function ListRow({ title, subtitle, icon, value, badge, toggle, accessory, destructive, onPress }: Props) {
   const styles = useStyles();
   const { colors } = useTheme();
-  const showChevron = !!onPress && !toggle && !accessory;
+  const showChevron = !!onPress && !toggle && !accessory && !destructive;
 
   return (
     <Pressable
@@ -34,16 +42,22 @@ export function SettingsRow({ title, subtitle, icon, value, badge, toggle, acces
       accessibilityRole={toggle ? 'switch' : onPress ? 'button' : undefined}
       accessibilityState={toggle ? { checked: toggle.value } : undefined}
     >
-      {icon && <IconCircle icon={icon} size={40} />}
+      {icon && <IconCircle icon={icon} size={LIST_ROW_ICON_SIZE} />}
       <View style={styles.texts}>
-        <AppText numberOfLines={2}>{title}</AppText>
+        <AppText numberOfLines={2} tone={destructive ? 'danger' : 'default'}>
+          {title}
+        </AppText>
         {subtitle && (
-          <AppText variant="small" tone="secondary">
+          <AppText variant="caption" tone="secondary">
             {subtitle}
           </AppText>
         )}
       </View>
-      {value && <AppText variant="smallStrong">{value}</AppText>}
+      {value && (
+        <AppText variant="small" tone="secondary">
+          {value}
+        </AppText>
+      )}
       {badge && <Chip label={badge} />}
       {accessory}
       {toggle && (
@@ -51,11 +65,11 @@ export function SettingsRow({ title, subtitle, icon, value, badge, toggle, acces
           value={toggle.value}
           onValueChange={toggle.onChange}
           trackColor={{ true: colors.primary }}
-          // Contrasting thumb so it stays visible on the white track in dark mode.
+          // Contrasting thumb so it stays visible on the light track in dark mode.
           thumbColor={toggle.value ? colors.onPrimary : undefined}
         />
       )}
-      {showChevron && <Ionicons name="chevron-forward" size={18} color={colors.textTertiary} />}
+      {showChevron && <Ionicons name="chevron-forward" size={16} color={colors.textTertiary} />}
     </Pressable>
   );
 }
@@ -64,10 +78,10 @@ const useStyles = makeStyles((c) => ({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    minHeight: 64,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    gap: LIST_ROW_GAP,
+    minHeight: 60,
+    paddingHorizontal: LIST_ROW_PADDING,
+    paddingVertical: 14,
     backgroundColor: c.card,
   },
   pressed: { backgroundColor: c.pressed },

@@ -2,17 +2,24 @@ import { Text, type TextProps, type TextStyle } from 'react-native';
 
 import type { Colors } from '../../theme/colors';
 import { useTheme } from '../../theme/ThemeProvider';
+import { fonts } from '../../theme/typography';
 
 const VARIANTS = {
-  display: { fontSize: 36, fontWeight: '800', letterSpacing: -0.8 },
-  title: { fontSize: 28, fontWeight: '800', letterSpacing: -0.5 },
-  heading: { fontSize: 19, fontWeight: '700', letterSpacing: -0.2 },
-  body: { fontSize: 16 },
-  bodyStrong: { fontSize: 16, fontWeight: '600' },
-  small: { fontSize: 14 },
-  smallStrong: { fontSize: 14, fontWeight: '600' },
-  caption: { fontSize: 12, fontWeight: '600' },
-  overline: { fontSize: 12, fontWeight: '600', letterSpacing: 1, textTransform: 'uppercase' },
+  display: { fontFamily: fonts.semibold, fontSize: 40, lineHeight: 46, letterSpacing: -1.4 },
+  title: { fontFamily: fonts.semibold, fontSize: 28, lineHeight: 34, letterSpacing: -0.8 },
+  heading: { fontFamily: fonts.semibold, fontSize: 18, lineHeight: 24, letterSpacing: -0.3 },
+  body: { fontFamily: fonts.regular, fontSize: 16, lineHeight: 23, letterSpacing: -0.1 },
+  bodyStrong: { fontFamily: fonts.medium, fontSize: 16, lineHeight: 23, letterSpacing: -0.1 },
+  small: { fontFamily: fonts.regular, fontSize: 14, lineHeight: 20 },
+  smallStrong: { fontFamily: fonts.medium, fontSize: 14, lineHeight: 20 },
+  caption: { fontFamily: fonts.regular, fontSize: 13, lineHeight: 18 },
+  overline: {
+    fontFamily: fonts.medium,
+    fontSize: 12,
+    lineHeight: 16,
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+  },
 } satisfies Record<string, TextStyle>;
 
 export type TextVariant = keyof typeof VARIANTS;

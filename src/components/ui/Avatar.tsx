@@ -1,6 +1,7 @@
 import { Pressable, Text, View } from 'react-native';
 
 import { useTheme } from '../../theme/ThemeProvider';
+import { fonts } from '../../theme/typography';
 
 type Props = {
   name: string;
@@ -28,7 +29,9 @@ export function Avatar({ name, size = 40, onPress }: Props) {
         justifyContent: 'center',
       }}
     >
-      <Text style={{ color: colors.onPrimary, fontSize: size * 0.4, fontWeight: '700' }}>{initials(name)}</Text>
+      <Text style={{ color: colors.onPrimary, fontSize: size * 0.4, fontFamily: fonts.semibold }}>
+        {initials(name)}
+      </Text>
     </View>
   );
 
@@ -39,6 +42,7 @@ export function Avatar({ name, size = 40, onPress }: Props) {
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={`Perfil de ${name}`}
+      hitSlop={6}
       style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
     >
       {circle}

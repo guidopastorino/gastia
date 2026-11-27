@@ -6,6 +6,8 @@ export { Card } from './Card';
 export { Chip } from './Chip';
 export { IconButton } from './IconButton';
 export { IconCircle } from './IconCircle';
+export { ListRow } from './ListRow';
+export { ListSection } from './ListSection';
 export { ProgressBar } from './ProgressBar';
 export { RichText } from './RichText';
 export { SectionHeader } from './SectionHeader';
