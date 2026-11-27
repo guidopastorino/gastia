@@ -108,18 +108,13 @@ export function AuthScreen() {
         )}
       </View>
 
-      <View style={styles.actions}>
-        <Button
-          title={isSignIn ? 'Iniciar sesión' : 'Crear cuenta'}
-          size="lg"
-          loading={loading}
-          disabled={!canSubmit}
-          onPress={handleSubmit}
-        />
-        {isSignIn && (
-          <Button title="Usar Face ID" icon="scan-outline" variant="ghost" size="lg" onPress={comingSoon('Face ID')} />
-        )}
-      </View>
+      <Button
+        title={isSignIn ? 'Iniciar sesión' : 'Crear cuenta'}
+        size="lg"
+        loading={loading}
+        disabled={!canSubmit}
+        onPress={handleSubmit}
+      />
 
       <View style={styles.footer}>
         <Pressable onPress={toggleMode} disabled={loading} style={styles.switchRow} hitSlop={10}>
@@ -143,7 +138,6 @@ const useStyles = makeStyles((c) => ({
   hero: { gap: 24 },
   heroText: { gap: 8 },
   form: { gap: 20 },
-  actions: { gap: 8 },
   footer: { flex: 1, justifyContent: 'flex-end', alignItems: 'center', gap: 16 },
   switchRow: { flexDirection: 'row', gap: 6 },
   securityRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
