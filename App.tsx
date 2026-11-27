@@ -6,7 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AuthProvider, useAuth } from './src/auth/AuthProvider';
 import { AppTabs } from './src/navigation/AppTabs';
-import { AuthScreen } from './src/screens/AuthScreen';
+import { AuthScreen } from './src/features/auth/AuthScreen';
 import { ThemeProvider, useTheme } from './src/theme/ThemeProvider';
 
 export default function App() {

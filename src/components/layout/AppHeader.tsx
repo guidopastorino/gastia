@@ -34,7 +34,7 @@ export function AppHeader({ title }: Props) {
       <IconButton
         icon="notifications-outline"
         accessibilityLabel="Notificaciones"
-        onPress={() => Alert.alert('Notificaciones', 'No tenés notificaciones nuevas.')}
+        onPress={() => Alert.alert('Notificaciones', 'No tienes notificaciones nuevas.')}
       />
       <Avatar name={name} size={38} onPress={() => navigation.navigate('Settings')} />
     </View>
