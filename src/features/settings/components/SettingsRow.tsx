@@ -46,7 +46,15 @@ export function SettingsRow({ title, subtitle, icon, value, badge, toggle, acces
       {value && <AppText variant="smallStrong">{value}</AppText>}
       {badge && <Chip label={badge} />}
       {accessory}
-      {toggle && <Switch value={toggle.value} onValueChange={toggle.onChange} trackColor={{ true: colors.primary }} />}
+      {toggle && (
+        <Switch
+          value={toggle.value}
+          onValueChange={toggle.onChange}
+          trackColor={{ true: colors.primary }}
+          // Contrasting thumb so it stays visible on the white track in dark mode.
+          thumbColor={toggle.value ? colors.onPrimary : undefined}
+        />
+      )}
       {showChevron && <Ionicons name="chevron-forward" size={18} color={colors.textTertiary} />}
     </Pressable>
   );
