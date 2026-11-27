@@ -4,6 +4,7 @@ import type { ComponentProps } from 'react';
 
 import { HomeScreen } from '../screens/HomeScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
+import { useTheme } from '../theme/ThemeProvider';
 
 export type AppTabsParamList = {
   Home: undefined;
@@ -20,11 +21,13 @@ const ICONS: Record<keyof AppTabsParamList, { active: IconName; inactive: IconNa
 const Tab = createBottomTabNavigator<AppTabsParamList>();
 
 export function AppTabs() {
+  const { colors } = useTheme();
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarActiveTintColor: '#111',
-        tabBarInactiveTintColor: '#8e8e93',
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textTertiary,
         tabBarIcon: ({ focused, color, size }) => (
           <Ionicons
             name={focused ? ICONS[route.name].active : ICONS[route.name].inactive}
