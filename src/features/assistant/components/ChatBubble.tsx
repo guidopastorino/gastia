@@ -23,7 +23,7 @@ export function ChatBubble({ message }: Props) {
 
   return (
     <View style={[styles.row, isUser && styles.rowUser]}>
-      {!isUser && <AssistantAvatar size={32} />}
+      {!isUser && <AssistantAvatar size={30} />}
       <View style={[styles.column, isUser && styles.columnUser]}>
         <View style={[styles.bubble, isUser ? styles.bubbleUser : styles.bubbleAssistant]}>
           {paragraphs.map((p, i) => (
@@ -60,13 +60,13 @@ export function ChatBubble({ message }: Props) {
 }
 
 const useStyles = makeStyles((c) => ({
-  row: { flexDirection: 'row', alignItems: 'flex-start', gap: 10 },
+  row: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
   rowUser: { justifyContent: 'flex-end' },
-  column: { flexShrink: 1, maxWidth: '86%', gap: 6 },
+  column: { flexShrink: 1, maxWidth: '84%', gap: 8 },
   columnUser: { alignItems: 'flex-end' },
-  bubble: { paddingHorizontal: 16, paddingVertical: 14, borderRadius: 20, gap: 12 },
-  bubbleAssistant: { backgroundColor: c.surface, borderTopLeftRadius: 6 },
-  bubbleUser: { backgroundColor: c.primary, borderBottomRightRadius: 6 },
+  bubble: { paddingHorizontal: 18, paddingVertical: 14, borderRadius: 22, gap: 12 },
+  bubbleAssistant: { backgroundColor: c.card, borderTopLeftRadius: 8 },
+  bubbleUser: { backgroundColor: c.primary, borderBottomRightRadius: 8 },
   metaRow: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 4 },
   metaRowUser: { justifyContent: 'flex-end' },
   actions: { flexDirection: 'row', gap: 16, marginLeft: 'auto' },

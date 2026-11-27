@@ -2,11 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { type ScrollViewInstance } from 'react-native';
 
 import { useAuth } from '../../auth/AuthProvider';
-import { TabScreen } from '../../components/layout/TabScreen';
+import { Screen } from '../../components/layout/Screen';
 import { AppText } from '../../components/ui';
 import { timeLabel } from '../../lib/date';
 import { getFirstName } from '../../lib/user';
-import { AssistantHeaderCard } from './components/AssistantHeaderCard';
 import { ChatBubble } from './components/ChatBubble';
 import { ChatComposer } from './components/ChatComposer';
 import { SuggestionChips } from './components/SuggestionChips';
@@ -44,13 +43,10 @@ export function AssistantScreen() {
   }
 
   return (
-    <TabScreen
-      title="Asistente IA"
+    <Screen
       scrollRef={scrollRef}
       onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
     >
-      <AssistantHeaderCard />
-
       {messages.map((m) => (
         <ChatBubble key={m.id} message={m} />
       ))}
@@ -68,6 +64,6 @@ export function AssistantScreen() {
       <AppText variant="caption" tone="tertiary" style={{ textAlign: 'center' }}>
         Gastia IA puede cometer errores. Verifica la información importante.
       </AppText>
-    </TabScreen>
+    </Screen>
   );
 }

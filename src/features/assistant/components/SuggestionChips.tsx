@@ -4,7 +4,7 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { AppText } from '../../../components/ui';
 import { makeStyles } from '../../../theme/makeStyles';
 import { useTheme } from '../../../theme/ThemeProvider';
-import { radius } from '../../../theme/tokens';
+import { radius, SCREEN_PADDING } from '../../../theme/tokens';
 import type { Suggestion } from '../types';
 
 type Props = {
@@ -19,11 +19,8 @@ export function SuggestionChips({ suggestions, onSelect }: Props) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <AppText variant="overline" tone="secondary">
-          Sugerencias inteligentes
-        </AppText>
-        <AppText variant="caption" tone="secondary">
-          Desliza →
+        <AppText variant="overline" tone="tertiary">
+          Sugerencias
         </AppText>
       </View>
       <ScrollView
@@ -51,17 +48,15 @@ export function SuggestionChips({ suggestions, onSelect }: Props) {
 const useStyles = makeStyles((c) => ({
   container: { gap: 10 },
   header: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 4 },
-  scroller: { marginHorizontal: -16 },
-  list: { gap: 8, paddingHorizontal: 16 },
+  scroller: { marginHorizontal: -SCREEN_PADDING },
+  list: { gap: 8, paddingHorizontal: SCREEN_PADDING },
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
     paddingHorizontal: 14,
-    paddingVertical: 11,
+    paddingVertical: 12,
     borderRadius: radius.pill,
     backgroundColor: c.card,
-    borderWidth: 1,
-    borderColor: c.separator,
   },
 }));

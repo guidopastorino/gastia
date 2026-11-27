@@ -5,6 +5,7 @@ import { IconButton } from '../../../components/ui';
 import { makeStyles } from '../../../theme/makeStyles';
 import { useTheme } from '../../../theme/ThemeProvider';
 import { radius } from '../../../theme/tokens';
+import { fonts } from '../../../theme/typography';
 
 type Props = {
   onSend: (text: string) => void;
@@ -32,7 +33,7 @@ export function ChatComposer({ onSend, disabled }: Props) {
       />
       <TextInput
         style={styles.input}
-        placeholder="Pregúntale a Gastia sobre tus finanzas"
+        placeholder="Pregúntale a Gastia"
         placeholderTextColor={colors.textTertiary}
         value={text}
         onChangeText={setText}
@@ -64,11 +65,9 @@ const useStyles = makeStyles((c) => ({
     gap: 4,
     paddingLeft: 6,
     paddingRight: 8,
-    paddingVertical: 8,
-    borderRadius: radius.lg,
+    paddingVertical: 6,
+    borderRadius: radius.pill,
     backgroundColor: c.card,
-    borderWidth: 1,
-    borderColor: c.separator,
   },
-  input: { flex: 1, fontSize: 16, color: c.text, maxHeight: 110, paddingVertical: 8 },
+  input: { flex: 1, fontSize: 16, fontFamily: fonts.regular, color: c.text, maxHeight: 110, paddingVertical: 8 },
 }));
