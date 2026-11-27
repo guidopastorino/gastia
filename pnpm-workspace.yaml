@@ -1,5 +1,4 @@
-packages:
-  - "apps/*"
-
+# pnpm settings for this single project (not a monorepo).
 allowBuilds:
-  esbuild: true
+  # The CLI ships a prebuilt binary via optional deps; no install script needed.
+  supabase: false

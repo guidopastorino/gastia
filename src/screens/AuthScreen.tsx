@@ -1,0 +1,136 @@
+import { useState } from 'react';
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+
+import { supabase } from '../lib/supabase';
+
+type Mode = 'signIn' | 'signUp';
+
+export function AuthScreen() {
+  const [mode, setMode] = useState<Mode>('signIn');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
+
+  const isSignIn = mode === 'signIn';
+  const canSubmit = email.trim().length > 0 && password.length >= 6 && !loading;
+
+  async function handleSubmit() {
+    setLoading(true);
+    setError(null);
+    setInfo(null);
+
+    const credentials = { email: email.trim(), password };
+
+    if (isSignIn) {
+      const { error } = await supabase.auth.signInWithPassword(credentials);
+      if (error) setError(error.message);
+    } else {
+      const { data, error } = await supabase.auth.signUp(credentials);
+      if (error) {
+        setError(error.message);
+      } else if (!data.session) {
+        // Email confirmation is enabled: no session until the user confirms.
+        setInfo('Te enviamos un correo para confirmar tu cuenta.');
+        setMode('signIn');
+      }
+    }
+
+    setLoading(false);
+  }
+
+  function toggleMode() {
+    setMode(isSignIn ? 'signUp' : 'signIn');
+    setError(null);
+    setInfo(null);
+  }
+
+  return (
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <View style={styles.form}>
+        <Text style={styles.title}>{isSignIn ? 'Iniciar sesión' : 'Crear cuenta'}</Text>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          autoCapitalize="none"
+          autoComplete="email"
+          keyboardType="email-address"
+          textContentType="emailAddress"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Contraseña (mínimo 6 caracteres)"
+          secureTextEntry
+          autoComplete={isSignIn ? 'current-password' : 'new-password'}
+          textContentType={isSignIn ? 'password' : 'newPassword'}
+          value={password}
+          onChangeText={setPassword}
+          onSubmitEditing={() => canSubmit && handleSubmit()}
+        />
+
+        {error && <Text style={styles.error}>{error}</Text>}
+        {info && <Text style={styles.info}>{info}</Text>}
+
+        <Pressable
+          style={[styles.button, !canSubmit && styles.buttonDisabled]}
+          onPress={handleSubmit}
+          disabled={!canSubmit}
+        >
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>{isSignIn ? 'Entrar' : 'Registrarme'}</Text>
+          )}
+        </Pressable>
+
+        <Pressable onPress={toggleMode} disabled={loading}>
+          <Text style={styles.link}>
+            {isSignIn ? '¿No tenés cuenta? Registrate' : '¿Ya tenés cuenta? Iniciá sesión'}
+          </Text>
+        </Pressable>
+      </View>
+    </KeyboardAvoidingView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#fff', justifyContent: 'center', padding: 24 },
+  form: { gap: 12 },
+  title: { fontSize: 26, fontWeight: '700', marginBottom: 8 },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontSize: 16,
+  },
+  error: { color: '#cf222e' },
+  info: { color: '#1a7f37' },
+  button: {
+    backgroundColor: '#111',
+    borderRadius: 8,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  buttonDisabled: { opacity: 0.4 },
+  buttonText: { color: '#fff', fontWeight: '600', fontSize: 16 },
+  link: { textAlign: 'center', color: '#0969da', marginTop: 8 },
+});
