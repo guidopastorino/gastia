@@ -3,42 +3,41 @@ import {
   createNativeBottomTabNavigator,
   type NativeBottomTabIcon,
 } from '@react-navigation/bottom-tabs/unstable';
-import { useEffect, useState, type ComponentProps } from 'react';
+import { useEffect, useState } from 'react';
 import { Platform, type ImageSourcePropType } from 'react-native';
 
-import { HomeScreen } from '../screens/HomeScreen';
-import { SettingsScreen } from '../screens/SettingsScreen';
+import type { IconName } from '../components/ui';
+import { AssistantScreen } from '../features/assistant/AssistantScreen';
+import { HomeScreen } from '../features/home/HomeScreen';
+import { SettingsScreen } from '../features/settings/SettingsScreen';
+import { StatsScreen } from '../features/stats/StatsScreen';
 import { useTheme } from '../theme/ThemeProvider';
-
-export type AppTabsParamList = {
-  Home: undefined;
-  Settings: undefined;
-};
+import type { AppTabsParamList } from './types';
 
 type TabName = keyof AppTabsParamList;
-type IoniconName = ComponentProps<typeof Ionicons>['name'];
 type SFSymbol = Extract<NativeBottomTabIcon, { type: 'sfSymbol' }>['name'];
+type AndroidIcons = Partial<Record<TabName, ImageSourcePropType>>;
 
 // iOS uses SF Symbols (native look, Liquid Glass on iOS 26+).
 // Android has no SF Symbols, so Ionicons are rendered to images and tinted natively.
-const ICONS: Record<TabName, { sf: SFSymbol; sfFocused: SFSymbol; android: IoniconName }> = {
-  Home: { sf: 'house', sfFocused: 'house.fill', android: 'home' },
-  Settings: { sf: 'gearshape', sfFocused: 'gearshape.fill', android: 'settings' },
+const ICONS: Record<TabName, { sf: SFSymbol; sfFocused: SFSymbol; android: IconName }> = {
+  Home: { sf: 'house', sfFocused: 'house.fill', android: 'home-outline' },
+  Stats: { sf: 'chart.bar', sfFocused: 'chart.bar.fill', android: 'stats-chart-outline' },
+  Assistant: { sf: 'sparkles', sfFocused: 'sparkles', android: 'sparkles-outline' },
+  Settings: { sf: 'slider.horizontal.3', sfFocused: 'slider.horizontal.3', android: 'options-outline' },
 };
 
 const Tab = createNativeBottomTabNavigator<AppTabsParamList>();
 
 function useAndroidIcons() {
-  const [icons, setIcons] = useState<Partial<Record<TabName, ImageSourcePropType>> | null>(
-    Platform.OS === 'android' ? null : {},
-  );
+  const [icons, setIcons] = useState<AndroidIcons | null>(Platform.OS === 'android' ? null : {});
 
   useEffect(() => {
     if (Platform.OS !== 'android') return;
     const names = Object.keys(ICONS) as TabName[];
     Promise.all(names.map((name) => Ionicons.getImageSource(ICONS[name].android, 24, 'black'))).then(
       (sources) => {
-        const loaded: Partial<Record<TabName, ImageSourcePropType>> = {};
+        const loaded: AndroidIcons = {};
         names.forEach((name, i) => {
           const source = sources[i];
           if (source) loaded[name] = source;
@@ -51,11 +50,8 @@ function useAndroidIcons() {
   return icons;
 }
 
-function tabIcon(
-  name: TabName,
-  androidIcons: Partial<Record<TabName, ImageSourcePropType>>,
-): ({ focused }: { focused: boolean }) => NativeBottomTabIcon {
-  return ({ focused }) => {
+function tabIcon(name: TabName, androidIcons: AndroidIcons) {
+  return ({ focused }: { focused: boolean }): NativeBottomTabIcon => {
     const androidSource = androidIcons[name];
     if (Platform.OS === 'android' && androidSource) {
       return { type: 'image', source: androidSource };
@@ -74,14 +70,8 @@ export function AppTabs() {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerShown: true,
-        // iOS: large title that collapses on scroll, over the screen background.
-        headerLargeTitleEnabled: true,
-        headerTransparent: Platform.OS === 'ios',
-        headerShadowVisible: false,
-        headerLargeTitleShadowVisible: false,
-        headerTintColor: colors.text,
-        headerStyle: Platform.OS === 'ios' ? undefined : { backgroundColor: colors.card },
+        // Screens render their own AppHeader (logo, title, actions).
+        headerShown: false,
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textTertiary,
       }}
@@ -90,6 +80,16 @@ export function AppTabs() {
         name="Home"
         component={HomeScreen}
         options={{ title: 'Inicio', tabBarIcon: tabIcon('Home', androidIcons) }}
+      />
+      <Tab.Screen
+        name="Stats"
+        component={StatsScreen}
+        options={{ title: 'Estadísticas', tabBarIcon: tabIcon('Stats', androidIcons) }}
+      />
+      <Tab.Screen
+        name="Assistant"
+        component={AssistantScreen}
+        options={{ title: 'Asistente IA', tabBarIcon: tabIcon('Assistant', androidIcons) }}
       />
       <Tab.Screen
         name="Settings"
