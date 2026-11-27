@@ -22,7 +22,11 @@ export function HomeScreen() {
   }
 
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
+    <ScrollView
+      style={styles.screen}
+      contentContainerStyle={styles.content}
+      contentInsetAdjustmentBehavior="automatic"
+    >
       <Text style={styles.title}>Hola 👋</Text>
       <Text style={styles.email}>{user.email}</Text>
 
@@ -63,9 +67,9 @@ function Row({
 function createStyles(colors: Colors) {
   return StyleSheet.create({
     screen: { flex: 1, backgroundColor: colors.background },
-    content: { padding: 24, gap: 12 },
-    title: { fontSize: 28, fontWeight: '700', color: colors.text },
-    email: { fontSize: 16, color: colors.textSecondary },
+    content: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24, gap: 12 },
+    title: { fontSize: 20, fontWeight: '600', color: colors.text },
+    email: { fontSize: 15, color: colors.textSecondary, marginTop: -8 },
     card: {
       borderWidth: 1,
       borderColor: colors.border,
