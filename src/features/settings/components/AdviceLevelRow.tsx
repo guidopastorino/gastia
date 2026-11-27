@@ -11,12 +11,6 @@ const OPTIONS = [
   { value: 'aggressive', label: 'Agresivo' },
 ] as const satisfies readonly { value: AdviceLevel; label: string }[];
 
-const SUMMARY: Record<AdviceLevel, string> = {
-  conservative: 'Prudente',
-  moderate: 'Equilibrado',
-  aggressive: 'Ambicioso',
-};
-
 type Props = {
   value: AdviceLevel;
   onChange: (value: AdviceLevel) => void;
@@ -27,10 +21,10 @@ export function AdviceLevelRow({ value, onChange }: Props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <AppText>Nivel de asesoría financiera</AppText>
+      <View style={styles.texts}>
+        <AppText>Nivel de asesoría</AppText>
         <AppText variant="caption" tone="secondary">
-          {SUMMARY[value]}
+          Qué tan arriesgadas son las sugerencias
         </AppText>
       </View>
       <SegmentedControl options={OPTIONS} value={value} onChange={onChange} />
@@ -39,6 +33,6 @@ export function AdviceLevelRow({ value, onChange }: Props) {
 }
 
 const useStyles = makeStyles((c) => ({
-  container: { gap: 12, padding: 16, backgroundColor: c.card },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
+  container: { gap: 14, paddingHorizontal: 18, paddingVertical: 16, backgroundColor: c.card },
+  texts: { gap: 2 },
 }));
