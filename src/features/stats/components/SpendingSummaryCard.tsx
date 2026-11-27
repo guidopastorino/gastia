@@ -1,7 +1,7 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { View } from 'react-native';
 
-import { AppText, Card, Chip } from '../../../components/ui';
+import { AppText } from '../../../components/ui';
 import { formatMoney } from '../../../lib/format';
 import { makeStyles } from '../../../theme/makeStyles';
 import { useTheme } from '../../../theme/ThemeProvider';
@@ -13,32 +13,32 @@ type Props = {
   deltaLabel: string;
 };
 
+/** Headline total for the selected period (spending less is good, so it shows in green). */
 export function SpendingSummaryCard({ periodLabel, total, delta, deltaLabel }: Props) {
   const styles = useStyles();
   const { colors } = useTheme();
+  const less = delta <= 0;
 
   return (
-    <Card style={styles.card}>
-      <View style={styles.header}>
-        <AppText variant="overline" tone="secondary">
-          Gastos acumulados
-        </AppText>
-        <Chip label={periodLabel} dot />
-      </View>
+    <View style={styles.container}>
+      <AppText variant="small" tone="secondary">
+        Gastos · {periodLabel}
+      </AppText>
       <AppText variant="display">{formatMoney(total)}</AppText>
       <View style={styles.deltaRow}>
-        <Ionicons name={delta <= 0 ? 'trending-down' : 'trending-up'} size={16} color={colors.text} />
-        <AppText variant="smallStrong">{formatMoney(delta, { signed: true })}</AppText>
+        <Ionicons name={less ? 'arrow-down' : 'arrow-up'} size={14} color={less ? colors.success : colors.danger} />
+        <AppText variant="smallStrong" tone={less ? 'success' : 'danger'}>
+          {formatMoney(Math.abs(delta))}
+        </AppText>
         <AppText variant="small" tone="secondary">
           {deltaLabel}
         </AppText>
       </View>
-    </Card>
+    </View>
   );
 }
 
 const useStyles = makeStyles(() => ({
-  card: { gap: 8 },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  deltaRow: { flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' },
+  container: { gap: 6 },
+  deltaRow: { flexDirection: 'row', alignItems: 'center', gap: 4, flexWrap: 'wrap' },
 }));

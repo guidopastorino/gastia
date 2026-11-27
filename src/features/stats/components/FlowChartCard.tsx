@@ -19,28 +19,32 @@ export function FlowChartCard({ stats }: Props) {
         <View style={styles.titles}>
           <AppText variant="heading">{stats.flowTitle}</AppText>
           <AppText variant="caption" tone="secondary">
-            {stats.flowSubtitle}
+            Toca o desliza para ver cada punto
           </AppText>
         </View>
         <View style={styles.legend}>
           <View style={styles.legendLine} />
-          <AppText variant="caption">{stats.averageLabel}</AppText>
+          <AppText variant="caption" tone="secondary">
+            {stats.averageLabel}
+          </AppText>
         </View>
       </View>
       <LineChart
+        // Remount per period so the selection resets to that period's peak.
+        key={stats.flowTitle}
         data={stats.flow}
         average={stats.average}
-        highlightIndex={stats.peakIndex}
-        formatValue={(v) => `Pico ${formatMoney(v, { decimals: 0 })}`}
+        initialIndex={stats.peakIndex}
+        formatValue={(v) => formatMoney(v, { decimals: 0 })}
       />
     </Card>
   );
 }
 
 const useStyles = makeStyles((c) => ({
-  card: { gap: 12 },
+  card: { gap: 20 },
   header: { flexDirection: 'row', justifyContent: 'space-between', gap: 12 },
   titles: { flex: 1, gap: 2 },
   legend: { flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start', marginTop: 4 },
-  legendLine: { width: 14, height: 2, backgroundColor: c.text },
+  legendLine: { width: 14, borderTopWidth: 1.5, borderStyle: 'dashed', borderColor: c.textTertiary },
 }));

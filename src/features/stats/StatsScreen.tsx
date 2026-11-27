@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Alert } from 'react-native';
 
-import { TabScreen } from '../../components/layout/TabScreen';
+import { Screen } from '../../components/layout/Screen';
 import { Button, SegmentedControl } from '../../components/ui';
 import { CategoryDistributionCard } from './components/CategoryDistributionCard';
 import { FlowChartCard } from './components/FlowChartCard';
@@ -14,7 +14,7 @@ export function StatsScreen() {
   const stats = statsByPeriod[period];
 
   return (
-    <TabScreen title="Estadísticas">
+    <Screen>
       <SegmentedControl options={PERIOD_OPTIONS} value={period} onChange={setPeriod} />
 
       <SpendingSummaryCard
@@ -31,11 +31,12 @@ export function StatsScreen() {
       <PredictionCard {...prediction} />
 
       <Button
-        title="Exportar informe en PDF / CSV"
+        title="Exportar informe"
         icon="download-outline"
+        variant="outline"
         size="lg"
         onPress={() => Alert.alert('Exportar informe', 'Próximamente.')}
       />
-    </TabScreen>
+    </Screen>
   );
 }

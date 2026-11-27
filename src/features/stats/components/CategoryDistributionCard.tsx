@@ -12,7 +12,7 @@ type Props = {
 };
 
 // Monochrome scale: biggest category darkest.
-const SHADES = [1, 0.72, 0.5, 0.3, 0.16];
+const SHADES = [1, 0.7, 0.48, 0.3, 0.16];
 
 export function CategoryDistributionCard({ categories }: Props) {
   const styles = useStyles();
@@ -22,9 +22,9 @@ export function CategoryDistributionCard({ categories }: Props) {
   return (
     <Card style={styles.card}>
       <View style={styles.header}>
-        <AppText variant="heading">Distribución por Categorías</AppText>
+        <AppText variant="heading">Categorías</AppText>
         <AppText variant="caption" tone="secondary">
-          {categories.length} grupos activos
+          {categories.length} activas
         </AppText>
       </View>
 
@@ -34,30 +34,40 @@ export function CategoryDistributionCard({ categories }: Props) {
         ))}
       </View>
 
-      {categories.map((cat, i) => (
-        <View key={cat.id} style={styles.item}>
-          <View style={styles.itemRow}>
-            <IconCircle icon={cat.icon} size={36} shape="rounded" />
-            <View style={styles.itemText}>
-              <AppText numberOfLines={1}>{cat.name}</AppText>
-              <AppText variant="caption" tone="secondary">
-                {Math.round(cat.share * 100)}% de los egresos
-              </AppText>
+      <View style={styles.list}>
+        {categories.map((cat, i) => (
+          <View key={cat.id} style={styles.item}>
+            <IconCircle icon={cat.icon} size={40} />
+            <View style={styles.itemBody}>
+              <View style={styles.itemRow}>
+                <AppText variant="bodyStrong" numberOfLines={1} style={styles.itemName}>
+                  {cat.name}
+                </AppText>
+                <AppText variant="bodyStrong">{formatMoney(cat.amount)}</AppText>
+              </View>
+              <View style={styles.itemRow}>
+                <ProgressBar value={cat.share} height={4} color={shade(i)} style={styles.itemBar} />
+                <AppText variant="caption" tone="tertiary" style={styles.pct}>
+                  {Math.round(cat.share * 100)}%
+                </AppText>
+              </View>
             </View>
-            <AppText variant="bodyStrong">{formatMoney(cat.amount)}</AppText>
           </View>
-          <ProgressBar value={cat.share} height={6} color={shade(i)} />
-        </View>
-      ))}
+        ))}
+      </View>
     </Card>
   );
 }
 
 const useStyles = makeStyles(() => ({
-  card: { gap: 18 },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
-  stack: { flexDirection: 'row', height: 12, borderRadius: 6, overflow: 'hidden', gap: 2 },
-  item: { gap: 10 },
-  itemRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  itemText: { flex: 1, gap: 2 },
+  card: { gap: 20 },
+  header: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' },
+  stack: { flexDirection: 'row', height: 8, borderRadius: 4, overflow: 'hidden', gap: 3 },
+  list: { gap: 18 },
+  item: { flexDirection: 'row', alignItems: 'center', gap: 14 },
+  itemBody: { flex: 1, gap: 8 },
+  itemRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  itemName: { flex: 1 },
+  itemBar: { flex: 1 },
+  pct: { width: 34, textAlign: 'right' },
 }));

@@ -18,7 +18,6 @@ export type PeriodStats = {
   delta: number;
   deltaLabel: string;
   flowTitle: string;
-  flowSubtitle: string;
   flow: ChartPoint[];
   average: number;
   averageLabel: string;
@@ -29,9 +28,8 @@ const monthStats: PeriodStats = {
   label: 'Noviembre 2026',
   total: 2460,
   delta: -320,
-  deltaLabel: 'respecto al mes anterior',
-  flowTitle: 'Flujo Semanal',
-  flowSubtitle: 'Línea base de control promedio diario',
+  deltaLabel: 'menos que el mes anterior',
+  flowTitle: 'Flujo semanal',
   flow: [
     { label: 'Sem 1', value: 58 },
     { label: '', value: 70 },
@@ -45,7 +43,7 @@ const monthStats: PeriodStats = {
     { label: 'Cierre', value: 104 },
   ],
   average: 82,
-  averageLabel: 'Media $82/d',
+  averageLabel: 'Media $82/día',
   peakIndex: 6,
 };
 
@@ -54,9 +52,8 @@ export const statsByPeriod: Record<Period, PeriodStats> = {
     label: 'Esta semana',
     total: 574,
     delta: 48,
-    deltaLabel: 'respecto a la semana anterior',
-    flowTitle: 'Flujo Diario',
-    flowSubtitle: 'Gasto por día de la semana',
+    deltaLabel: 'más que la semana anterior',
+    flowTitle: 'Flujo diario',
     flow: [
       { label: 'Lun', value: 64 },
       { label: 'Mar', value: 52 },
@@ -67,7 +64,7 @@ export const statsByPeriod: Record<Period, PeriodStats> = {
       { label: 'Dom', value: 51 },
     ],
     average: 82,
-    averageLabel: 'Media $82/d',
+    averageLabel: 'Media $82/día',
     peakIndex: 4,
   },
   month: monthStats,
@@ -75,9 +72,8 @@ export const statsByPeriod: Record<Period, PeriodStats> = {
     label: '2026',
     total: 28940,
     delta: -1210,
-    deltaLabel: 'respecto al año anterior',
-    flowTitle: 'Flujo Mensual',
-    flowSubtitle: 'Gasto total por mes',
+    deltaLabel: 'menos que el año anterior',
+    flowTitle: 'Flujo mensual',
     flow: [
       { label: 'Ene', value: 2310 },
       { label: '', value: 2580 },
@@ -92,10 +88,10 @@ export const statsByPeriod: Record<Period, PeriodStats> = {
       { label: 'Nov', value: 2460 },
     ],
     average: 2560,
-    averageLabel: 'Media $2.5k/m',
+    averageLabel: 'Media $2.5k/mes',
     peakIndex: 5,
   },
-  range: { ...monthStats, label: 'Personalizado' },
+  range: { ...monthStats, label: 'Personalizado', flowTitle: 'Flujo del rango' },
 };
 
 export const categories: ExpenseCategory[] = [
@@ -110,5 +106,5 @@ export const prediction = {
   confidence: 96,
   projected: 2740,
   target: 3000,
-  note: 'Manteniendo el gasto diario actual de **$79.35**, superarás tu margen estimado de seguridad financiera por 4 días consecutivos.',
+  note: 'Si mantienes tu gasto diario de **$79.35**, superarás tu margen de seguridad 4 días antes de fin de mes.',
 };
