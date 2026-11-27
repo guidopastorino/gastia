@@ -7,6 +7,7 @@ export { Chip } from './Chip';
 export { IconButton } from './IconButton';
 export { IconCircle } from './IconCircle';
 export { ProgressBar } from './ProgressBar';
+export { RichText } from './RichText';
 export { SectionHeader } from './SectionHeader';
 export { SegmentedControl } from './SegmentedControl';
 export type { IconName } from './types';
