@@ -1,16 +1,20 @@
+import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AuthProvider, useAuth } from './src/auth/AuthProvider';
+import { AppTabs } from './src/navigation/AppTabs';
 import { AuthScreen } from './src/screens/AuthScreen';
-import { HomeScreen } from './src/screens/HomeScreen';
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Root />
-      <StatusBar style="auto" />
-    </AuthProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <Root />
+        <StatusBar style="auto" />
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }
 
@@ -25,7 +29,13 @@ function Root() {
     );
   }
 
-  return session ? <HomeScreen session={session} /> : <AuthScreen />;
+  if (!session) return <AuthScreen />;
+
+  return (
+    <NavigationContainer>
+      <AppTabs />
+    </NavigationContainer>
+  );
 }
 
 const styles = StyleSheet.create({
