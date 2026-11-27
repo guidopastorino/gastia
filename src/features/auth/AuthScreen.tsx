@@ -4,12 +4,12 @@ import { Alert, Pressable, ScrollView, View, type TextInputInstance } from 'reac
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { GastiaLogo } from '../../components/brand/GastiaLogo';
-import { AppText, Button, Card, Chip } from '../../components/ui';
+import { AppText, Button } from '../../components/ui';
 import { supabase } from '../../lib/supabase';
 import { makeStyles } from '../../theme/makeStyles';
 import { useTheme } from '../../theme/ThemeProvider';
+import { SCREEN_PADDING } from '../../theme/tokens';
 import { AuthField } from './components/AuthField';
-import { InfoNote } from './components/InfoNote';
 
 type Mode = 'signIn' | 'signUp';
 
@@ -55,26 +55,25 @@ export function AuthScreen() {
       style={styles.screen}
       contentContainerStyle={[
         styles.content,
-        { paddingTop: insets.top + 32, paddingBottom: insets.bottom + 24 },
+        { paddingTop: insets.top + 56, paddingBottom: insets.bottom + 24 },
       ]}
       automaticallyAdjustKeyboardInsets
       keyboardShouldPersistTaps="handled"
     >
       <View style={styles.hero}>
-        <GastiaLogo size={88} />
-        <Chip label="Inteligencia algorítmica" icon="sparkles-outline" uppercase size="md" />
-        <AppText variant="title" style={styles.center}>
-          Gastia
-        </AppText>
-        <AppText tone="secondary" style={styles.center}>
-          Tus finanzas inteligentes, simplificadas al extremo
-        </AppText>
+        <GastiaLogo size={64} />
+        <View style={styles.heroText}>
+          <AppText variant="title">{isSignIn ? 'Bienvenido a Gastia' : 'Crea tu cuenta'}</AppText>
+          <AppText tone="secondary">
+            {isSignIn ? 'Tus finanzas, simples e inteligentes.' : 'Empieza a ordenar tus gastos en minutos.'}
+          </AppText>
+        </View>
       </View>
 
-      <Card style={styles.form}>
+      <View style={styles.form}>
         <AuthField
-          label="Correo electrónico"
-          icon="at"
+          label="Email"
+          icon="mail-outline"
           placeholder="correo@ejemplo.com"
           autoCapitalize="none"
           autoComplete="email"
@@ -88,7 +87,7 @@ export function AuthScreen() {
         <AuthField
           ref={passwordRef}
           label="Contraseña"
-          icon="lock-open-outline"
+          icon="lock-closed-outline"
           placeholder={isSignIn ? 'Tu contraseña' : 'Mínimo 6 caracteres'}
           secure
           autoComplete={isSignIn ? 'current-password' : 'new-password'}
@@ -98,7 +97,7 @@ export function AuthScreen() {
           onChangeText={setPassword}
           onSubmitEditing={handleSubmit}
           labelAction={
-            isSignIn ? { text: '¿Olvidaste tu contraseña?', onPress: comingSoon('Recuperar contraseña') } : undefined
+            isSignIn ? { text: '¿La olvidaste?', onPress: comingSoon('Recuperar contraseña') } : undefined
           }
         />
 
@@ -107,40 +106,28 @@ export function AuthScreen() {
             {error}
           </AppText>
         )}
+      </View>
 
+      <View style={styles.actions}>
         <Button
-          title={isSignIn ? 'Iniciar Sesión' : 'Crear cuenta'}
-          icon="arrow-forward"
-          iconPosition="right"
+          title={isSignIn ? 'Iniciar sesión' : 'Crear cuenta'}
           size="lg"
           loading={loading}
           disabled={!canSubmit}
           onPress={handleSubmit}
         />
         {isSignIn && (
-          <Button
-            title="Ingresar con Face ID"
-            icon="happy-outline"
-            variant="secondary"
-            size="lg"
-            onPress={comingSoon('Face ID')}
-          />
+          <Button title="Usar Face ID" icon="scan-outline" variant="ghost" size="lg" onPress={comingSoon('Face ID')} />
         )}
-      </Card>
-
-      <InfoNote
-        icon="analytics-outline"
-        title="Privacidad por diseño"
-        text="Tus datos financieros son solo tuyos: nunca los compartimos."
-      />
+      </View>
 
       <View style={styles.footer}>
-        <Pressable onPress={toggleMode} disabled={loading} style={styles.switchRow} hitSlop={8}>
+        <Pressable onPress={toggleMode} disabled={loading} style={styles.switchRow} hitSlop={10}>
           <AppText tone="secondary">{isSignIn ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?'}</AppText>
-          <AppText style={styles.switchLink}>{isSignIn ? 'Regístrate gratis' : 'Inicia sesión'}</AppText>
+          <AppText variant="bodyStrong">{isSignIn ? 'Regístrate' : 'Inicia sesión'}</AppText>
         </Pressable>
         <View style={styles.securityRow}>
-          <Ionicons name="shield-checkmark-outline" size={16} color={colors.textTertiary} />
+          <Ionicons name="lock-closed" size={12} color={colors.textTertiary} />
           <AppText variant="caption" tone="tertiary">
             Conexión segura y cifrada
           </AppText>
@@ -152,12 +139,12 @@ export function AuthScreen() {
 
 const useStyles = makeStyles((c) => ({
   screen: { flex: 1, backgroundColor: c.background },
-  content: { paddingHorizontal: 20, gap: 24 },
-  hero: { alignItems: 'center', gap: 12 },
-  center: { textAlign: 'center' },
-  form: { gap: 18 },
-  footer: { alignItems: 'center', gap: 16, marginTop: 8 },
+  content: { flexGrow: 1, paddingHorizontal: SCREEN_PADDING + 4, gap: 36 },
+  hero: { gap: 24 },
+  heroText: { gap: 8 },
+  form: { gap: 20 },
+  actions: { gap: 8 },
+  footer: { flex: 1, justifyContent: 'flex-end', alignItems: 'center', gap: 16 },
   switchRow: { flexDirection: 'row', gap: 6 },
-  switchLink: { fontWeight: '600', textDecorationLine: 'underline', color: c.text },
   securityRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
 }));

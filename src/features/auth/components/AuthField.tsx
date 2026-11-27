@@ -12,6 +12,7 @@ import { AppText, type IconName } from '../../../components/ui';
 import { makeStyles } from '../../../theme/makeStyles';
 import { useTheme } from '../../../theme/ThemeProvider';
 import { radius } from '../../../theme/tokens';
+import { fonts } from '../../../theme/typography';
 
 type Props = Omit<TextInputProps, 'ref'> & {
   ref?: Ref<TextInputInstance>;
@@ -31,15 +32,17 @@ export function AuthField({ ref, label, icon, labelAction, secure, style, ...inp
   return (
     <View style={styles.container}>
       <View style={styles.labelRow}>
-        <AppText variant="small">{label}</AppText>
+        <AppText variant="smallStrong">{label}</AppText>
         {labelAction && (
           <Pressable onPress={labelAction.onPress} hitSlop={8}>
-            <AppText variant="caption">{labelAction.text}</AppText>
+            <AppText variant="small" tone="secondary">
+              {labelAction.text}
+            </AppText>
           </Pressable>
         )}
       </View>
       <View style={styles.inputRow}>
-        <Ionicons name={icon} size={20} color={colors.icon} />
+        <Ionicons name={icon} size={19} color={colors.textTertiary} />
         <TextInput
           ref={ref}
           style={[styles.input, style]}
@@ -54,7 +57,7 @@ export function AuthField({ ref, label, icon, labelAction, secure, style, ...inp
             accessibilityRole="button"
             accessibilityLabel={hidden ? 'Mostrar contraseña' : 'Ocultar contraseña'}
           >
-            <Ionicons name={hidden ? 'eye-outline' : 'eye-off-outline'} size={21} color={colors.icon} />
+            <Ionicons name={hidden ? 'eye-outline' : 'eye-off-outline'} size={20} color={colors.textTertiary} />
           </Pressable>
         )}
       </View>
@@ -63,16 +66,16 @@ export function AuthField({ ref, label, icon, labelAction, secure, style, ...inp
 }
 
 const useStyles = makeStyles((c) => ({
-  container: { gap: 8 },
+  container: { gap: 10 },
   labelRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-    height: 52,
-    paddingHorizontal: 14,
-    borderRadius: radius.md,
-    backgroundColor: c.surface,
+    gap: 12,
+    height: 54,
+    paddingHorizontal: 18,
+    borderRadius: radius.pill,
+    backgroundColor: c.card,
   },
-  input: { flex: 1, height: '100%', fontSize: 16, color: c.text },
+  input: { flex: 1, height: '100%', fontSize: 16, fontFamily: fonts.regular, color: c.text },
 }));
