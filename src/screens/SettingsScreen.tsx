@@ -71,32 +71,32 @@ export function SettingsScreen() {
         </Pressable>
 
         <Section title="Cuenta">
-          <Row icon="person" color="#0a84ff" label="Editar perfil" onPress={comingSoon('Editar perfil')} />
-          <Row icon="key" color="#8e8e93" label="Cambiar contraseña" onPress={comingSoon('Cambiar contraseña')} />
-          <Row icon="star" color="#ff9f0a" label="Plan" value="Gratis" onPress={comingSoon('Plan')} />
+          <Row icon="person-outline" color="#0a84ff" label="Editar perfil" onPress={comingSoon('Editar perfil')} />
+          <Row icon="key-outline" color="#8e8e93" label="Cambiar contraseña" onPress={comingSoon('Cambiar contraseña')} />
+          <Row icon="star-outline" color="#ff9f0a" label="Plan" value="Gratis" onPress={comingSoon('Plan')} />
         </Section>
 
         <Section title="Preferencias">
-          <Row icon="contrast" color="#636366" label="Tema">
+          <Row icon="contrast-outline" color="#8e8e93" label="Tema">
             <SegmentedControl options={THEME_OPTIONS} value={preference} onChange={setPreference} />
           </Row>
-          <Row icon="cash" color="#30d158" label="Moneda" value="USD" onPress={comingSoon('Moneda')} />
-          <Row icon="globe" color="#5e5ce6" label="Idioma" value="Español" onPress={comingSoon('Idioma')} />
+          <Row icon="cash-outline" color="#30d158" label="Moneda" value="USD" onPress={comingSoon('Moneda')} />
+          <Row icon="globe-outline" color="#5e5ce6" label="Idioma" value="Español" onPress={comingSoon('Idioma')} />
         </Section>
 
         <Section title="Notificaciones" footer="Te avisamos cuando te acercás a tu presupuesto.">
-          <Row icon="notifications" color="#ff375f" label="Notificaciones push">
+          <Row icon="notifications-outline" color="#ff375f" label="Notificaciones push">
             <Switch value={notifications} onValueChange={setNotifications} />
           </Row>
-          <Row icon="calendar" color="#ff9f0a" label="Resumen mensual">
+          <Row icon="calendar-outline" color="#ff9f0a" label="Resumen mensual">
             <Switch value={monthlySummary} onValueChange={setMonthlySummary} />
           </Row>
         </Section>
 
         <Section title="Soporte">
-          <Row icon="help-circle" color="#0a84ff" label="Ayuda" onPress={comingSoon('Ayuda')} />
-          <Row icon="document-text" color="#8e8e93" label="Términos y condiciones" onPress={comingSoon('Términos')} />
-          <Row icon="shield-checkmark" color="#30d158" label="Privacidad" onPress={comingSoon('Privacidad')} />
+          <Row icon="help-circle-outline" color="#0a84ff" label="Ayuda" onPress={comingSoon('Ayuda')} />
+          <Row icon="document-text-outline" color="#8e8e93" label="Términos y condiciones" onPress={comingSoon('Términos')} />
+          <Row icon="shield-checkmark-outline" color="#30d158" label="Privacidad" onPress={comingSoon('Privacidad')} />
         </Section>
 
         <Section>
@@ -152,9 +152,7 @@ function Row({ icon, color, label, value, onPress, children }: RowProps) {
       onPress={onPress}
       disabled={!onPress}
     >
-      <View style={[styles.iconBox, { backgroundColor: color }]}>
-        <Ionicons name={icon} size={16} color="#fff" />
-      </View>
+      <Ionicons name={icon} size={ICON_SIZE} color={color} style={styles.icon} />
       <Text style={styles.rowLabel} numberOfLines={1}>
         {label}
       </Text>
@@ -168,7 +166,7 @@ function Row({ icon, color, label, value, onPress, children }: RowProps) {
   );
 }
 
-const ICON_BOX = 29;
+const ICON_SIZE = 22;
 const ROW_PADDING = 16;
 
 function createStyles(colors: Colors) {
@@ -205,25 +203,19 @@ function createStyles(colors: Colors) {
     separator: {
       height: StyleSheet.hairlineWidth,
       backgroundColor: colors.separator,
-      marginLeft: ROW_PADDING + ICON_BOX + 12,
+      marginLeft: ROW_PADDING + ICON_SIZE + 14,
     },
 
     row: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 12,
+      gap: 14,
       minHeight: 48,
       paddingHorizontal: ROW_PADDING,
       paddingVertical: 8,
       backgroundColor: colors.card,
     },
-    iconBox: {
-      width: ICON_BOX,
-      height: ICON_BOX,
-      borderRadius: 7,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
+    icon: { width: ICON_SIZE, textAlign: 'center' },
     rowLabel: { flex: 1, fontSize: 16, color: colors.text },
     rowRight: { flexDirection: 'row', alignItems: 'center', gap: 6 },
     rowValue: { fontSize: 16, color: colors.textTertiary },
