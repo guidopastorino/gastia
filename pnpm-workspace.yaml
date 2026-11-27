@@ -1,2 +1,4 @@
+# pnpm settings for this single project (not a monorepo).
 allowBuilds:
-  supabase: set this to true or false
+  # The CLI ships a prebuilt binary via optional deps; no install script needed.
+  supabase: false
