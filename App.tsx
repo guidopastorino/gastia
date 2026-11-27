@@ -32,7 +32,7 @@ function Root() {
       colors: {
         ...base.colors,
         primary: colors.primary,
-        background: colors.groupedBackground,
+        background: colors.background,
         card: colors.card,
         text: colors.text,
         border: colors.separator,

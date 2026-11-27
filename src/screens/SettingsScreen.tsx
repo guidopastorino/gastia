@@ -4,7 +4,7 @@ import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 're
 
 import appConfig from '../../app.json';
 import { useAuth } from '../auth/AuthProvider';
-import { SegmentedControl } from '../components/SegmentedControl';
+import { SegmentedControl } from '../components/ui';
 import { supabase } from '../lib/supabase';
 import type { Colors } from '../theme/colors';
 import { useTheme, type ThemePreference } from '../theme/ThemeProvider';
@@ -170,7 +170,7 @@ const ROW_PADDING = 16;
 
 function createStyles(colors: Colors) {
   return StyleSheet.create({
-    screen: { flex: 1, backgroundColor: colors.groupedBackground },
+    screen: { flex: 1, backgroundColor: colors.background },
     content: { paddingVertical: 20, paddingHorizontal: 16, gap: 24 },
     pressed: { backgroundColor: colors.pressed },
 
