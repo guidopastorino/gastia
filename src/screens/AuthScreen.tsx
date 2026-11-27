@@ -20,7 +20,6 @@ export function AuthScreen() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [info, setInfo] = useState<string | null>(null);
 
   const isSignIn = mode === 'signIn';
   const canSubmit = email.trim().length > 0 && password.length >= 6 && !loading;
@@ -28,31 +27,20 @@ export function AuthScreen() {
   async function handleSubmit() {
     setLoading(true);
     setError(null);
-    setInfo(null);
 
     const credentials = { email: email.trim(), password };
+    // On success the session listener in AuthProvider switches to the home screen.
+    const { error } = isSignIn
+      ? await supabase.auth.signInWithPassword(credentials)
+      : await supabase.auth.signUp(credentials);
 
-    if (isSignIn) {
-      const { error } = await supabase.auth.signInWithPassword(credentials);
-      if (error) setError(error.message);
-    } else {
-      const { data, error } = await supabase.auth.signUp(credentials);
-      if (error) {
-        setError(error.message);
-      } else if (!data.session) {
-        // Email confirmation is enabled: no session until the user confirms.
-        setInfo('Te enviamos un correo para confirmar tu cuenta.');
-        setMode('signIn');
-      }
-    }
-
+    if (error) setError(error.message);
     setLoading(false);
   }
 
   function toggleMode() {
     setMode(isSignIn ? 'signUp' : 'signIn');
     setError(null);
-    setInfo(null);
   }
 
   return (
@@ -85,7 +73,6 @@ export function AuthScreen() {
         />
 
         {error && <Text style={styles.error}>{error}</Text>}
-        {info && <Text style={styles.info}>{info}</Text>}
 
         <Pressable
           style={[styles.button, !canSubmit && styles.buttonDisabled]}
@@ -122,7 +109,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   error: { color: '#cf222e' },
-  info: { color: '#1a7f37' },
   button: {
     backgroundColor: '#111',
     borderRadius: 8,
