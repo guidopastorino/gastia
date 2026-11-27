@@ -1,17 +1,24 @@
 {
   "name": "gastia",
+  "version": "1.0.0",
   "private": true,
+  "main": "index.ts",
   "packageManager": "pnpm@11.21.0",
   "scripts": {
-    "setup": "pnpm install",
-    "mobile": "pnpm --filter mobile start",
-    "mobile:ios": "pnpm --filter mobile ios",
-    "mobile:android": "pnpm --filter mobile android",
-    "mobile:web": "pnpm --filter mobile web",
-    "mobile:typecheck": "pnpm --filter mobile exec tsc --noEmit",
-    "api": "pnpm --filter api dev",
-    "api:build": "pnpm --filter api build",
-    "api:typecheck": "pnpm --filter api typecheck",
-    "api:deploy": "pnpm --filter api run deploy"
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "expo": "~58.0.26",
+    "expo-constants": "~58.0.16",
+    "expo-status-bar": "~58.0.5",
+    "react": "19.3.0",
+    "react-native": "0.88.1"
+  },
+  "devDependencies": {
+    "@types/react": "~19.3.0",
+    "typescript": "~6.0.3"
   }
 }
