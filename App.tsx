@@ -1,20 +1,33 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
+
+import { AuthProvider, useAuth } from './src/auth/AuthProvider';
+import { AuthScreen } from './src/screens/AuthScreen';
+import { HomeScreen } from './src/screens/HomeScreen';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>gastia</Text>
+    <AuthProvider>
+      <Root />
       <StatusBar style="auto" />
-    </View>
+    </AuthProvider>
   );
 }
 
+function Root() {
+  const { session, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
+  return session ? <HomeScreen session={session} /> : <AuthScreen />;
+}
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' },
 });
