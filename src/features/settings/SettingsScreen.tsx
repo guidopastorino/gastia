@@ -41,7 +41,7 @@ export function SettingsScreen() {
         onPress={() => navigation.navigate('Profile')}
       />
 
-      <PlanCard onManage={comingSoon('Suscripción')} />
+      <PlanCard />
 
       <ListSection title="Inteligencia artificial">
         <ListRow

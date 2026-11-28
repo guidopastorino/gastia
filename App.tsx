@@ -7,6 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AuthProvider, useAuth } from './src/auth/AuthProvider';
 import { AuthScreen } from './src/features/auth/AuthScreen';
+import { SubscriptionProvider } from './src/features/subscription/SubscriptionProvider';
 import { RootNavigator } from './src/navigation/RootNavigator';
 import { ThemeProvider, useTheme } from './src/theme/ThemeProvider';
 import { fontAssets, fonts } from './src/theme/typography';
@@ -21,7 +22,9 @@ export default function App() {
     <SafeAreaProvider>
       <ThemeProvider>
         <AuthProvider>
-          <Root />
+          <SubscriptionProvider>
+            <Root />
+          </SubscriptionProvider>
         </AuthProvider>
       </ThemeProvider>
     </SafeAreaProvider>
