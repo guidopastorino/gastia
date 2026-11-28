@@ -46,6 +46,7 @@ export async function fetchAccounts(): Promise<Account[]> {
   const { data, error } = await supabase
     .from('account_balances')
     .select('id, name, icon, balance')
+    .order('position')
     .order('created_at');
   if (error) throw error;
   return data.map((a) => ({

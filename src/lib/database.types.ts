@@ -20,6 +20,7 @@ export type Database = {
           icon: string
           id: string
           name: string
+          position: number
           user_id: string
         }
         Insert: {
@@ -27,6 +28,7 @@ export type Database = {
           icon?: string
           id?: string
           name: string
+          position?: number
           user_id?: string
         }
         Update: {
@@ -34,6 +36,7 @@ export type Database = {
           icon?: string
           id?: string
           name?: string
+          position?: number
           user_id?: string
         }
         Relationships: []
@@ -77,6 +80,13 @@ export type Database = {
             foreignKeyName: "transactions_account_id_fkey"
             columns: ["account_id"]
             isOneToOne: false
+            referencedRelation: "account_balances"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
             referencedRelation: "accounts"
             referencedColumns: ["id"]
           },
@@ -91,6 +101,7 @@ export type Database = {
           icon: string | null
           id: string | null
           name: string | null
+          position: number | null
           user_id: string | null
         }
         Relationships: []
