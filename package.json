@@ -20,7 +20,7 @@
     "supabase:diff": "supabase db diff",
     "supabase:link": "supabase link",
     "supabase:push": "supabase db push",
-    "supabase:types": "supabase gen types typescript --local > src/lib/database.types.ts"
+    "supabase:types": "supabase gen types typescript --project-id hemsjwssawqsasobsign > src/lib/database.types.ts"
   },
   "dependencies": {
     "@expo-google-fonts/geist": "^0.4.2",
