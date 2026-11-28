@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { type ScrollViewInstance } from 'react-native';
+import { ActivityIndicator, type ScrollViewInstance } from 'react-native';
 
 import { useAuth } from '../../auth/AuthProvider';
 import { Screen } from '../../components/layout/Screen';
 import { AppText } from '../../components/ui';
 import { timeLabel } from '../../lib/date';
 import { getFirstName } from '../../lib/user';
+import { useTheme } from '../../theme/ThemeProvider';
+import { ProUpsell } from '../subscription/components/ProUpsell';
+import { useSubscription } from '../subscription/SubscriptionProvider';
 import { ChatBubble } from './components/ChatBubble';
 import { ChatComposer } from './components/ChatComposer';
 import { SuggestionChips } from './components/SuggestionChips';
@@ -14,7 +17,28 @@ import type { ChatMessage } from './types';
 
 const REPLY_DELAY_MS = 900;
 
+/** The tab is always there; its content is the assistant for Pro users and the upgrade for Free ones. */
 export function AssistantScreen() {
+  const { colors } = useTheme();
+  const { status, isPro } = useSubscription();
+
+  if (isPro) return <AssistantChat />;
+
+  return (
+    <Screen>
+      {status === 'loading' ? (
+        <ActivityIndicator color={colors.textSecondary} style={{ marginTop: 40 }} />
+      ) : (
+        <ProUpsell
+          title="El asistente es parte de Gastia Pro"
+          subtitle="Pásate a Pro para hablar con tu asistente financiero con IA."
+        />
+      )}
+    </Screen>
+  );
+}
+
+function AssistantChat() {
   const { session } = useAuth();
   const scrollRef = useRef<ScrollViewInstance>(null);
   const [messages, setMessages] = useState<ChatMessage[]>(() =>
