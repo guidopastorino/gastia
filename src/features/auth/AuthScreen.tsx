@@ -1,8 +1,9 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRef, useState } from 'react';
-import { Alert, Pressable, ScrollView, View, type TextInputInstance } from 'react-native';
+import { Alert, Pressable, ScrollView, StyleSheet, View, type TextInputInstance } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { signInWithGoogle } from '../../auth/googleSignIn';
 import { GastiaLogo } from '../../components/brand/GastiaLogo';
 import { AppText, Button } from '../../components/ui';
 import { supabase } from '../../lib/supabase';
@@ -32,11 +33,13 @@ export function AuthScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const isSignIn = mode === 'signIn';
   const nameValid = isSignIn || normalizeName(fullName).length >= 2;
-  const canSubmit = nameValid && email.trim().length > 0 && password.length >= 6 && !loading;
+  const busy = loading || googleLoading;
+  const canSubmit = nameValid && email.trim().length > 0 && password.length >= 6 && !busy;
 
   async function handleSubmit() {
     if (!canSubmit) return;
@@ -55,6 +58,16 @@ export function AuthScreen() {
 
     if (error) setError(error.message);
     setLoading(false);
+  }
+
+  async function handleGoogle() {
+    if (busy) return;
+    setGoogleLoading(true);
+    setError(null);
+    // On success the session listener in AuthProvider switches to the tabs.
+    const result = await signInWithGoogle();
+    if (result.status === 'error') setError(result.message);
+    setGoogleLoading(false);
   }
 
   function toggleMode() {
@@ -143,8 +156,26 @@ export function AuthScreen() {
         onPress={handleSubmit}
       />
 
+      <View style={styles.divider}>
+        <View style={styles.dividerLine} />
+        <AppText variant="caption" tone="tertiary">
+          o
+        </AppText>
+        <View style={styles.dividerLine} />
+      </View>
+
+      <Button
+        title="Continuar con Google"
+        variant="outline"
+        size="lg"
+        icon="logo-google"
+        loading={googleLoading}
+        disabled={loading}
+        onPress={handleGoogle}
+      />
+
       <View style={styles.footer}>
-        <Pressable onPress={toggleMode} disabled={loading} style={styles.switchRow} hitSlop={10}>
+        <Pressable onPress={toggleMode} disabled={busy} style={styles.switchRow} hitSlop={10}>
           <AppText tone="secondary">{isSignIn ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?'}</AppText>
           <AppText variant="bodyStrong">{isSignIn ? 'Regístrate' : 'Inicia sesión'}</AppText>
         </Pressable>
@@ -165,6 +196,8 @@ const useStyles = makeStyles((c) => ({
   hero: { gap: 24 },
   heroText: { gap: 8 },
   form: { gap: 20 },
+  divider: { flexDirection: 'row', alignItems: 'center', gap: 12, marginVertical: -20 },
+  dividerLine: { flex: 1, height: StyleSheet.hairlineWidth, backgroundColor: c.border },
   footer: { flex: 1, justifyContent: 'flex-end', alignItems: 'center', gap: 16 },
   switchRow: { flexDirection: 'row', gap: 6 },
   securityRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
