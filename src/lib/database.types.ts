@@ -109,6 +109,7 @@ export type Database = {
     }
     Functions: {
       get_home_summary: { Args: never; Returns: Json }
+      get_stats: { Args: { p_period: string; p_tz?: string }; Returns: Json }
       transfer_between_accounts: {
         Args: {
           p_amount: number
