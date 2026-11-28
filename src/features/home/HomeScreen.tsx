@@ -1,41 +1,94 @@
+import { useNavigation, type NavigationProp } from '@react-navigation/native';
 import { useState } from 'react';
-import { Alert, View } from 'react-native';
+import { ActivityIndicator, Alert, RefreshControl, View } from 'react-native';
 
 import { useAuth } from '../../auth/AuthProvider';
 import { Sparkline } from '../../components/charts/Sparkline';
 import { Screen } from '../../components/layout/Screen';
-import { ProgressBar } from '../../components/ui';
+import { AppText, Button, ProgressBar } from '../../components/ui';
 import { greetingForHour } from '../../lib/date';
 import { formatMoney, formatPercent } from '../../lib/format';
 import { getFirstName } from '../../lib/user';
+import type { RootStackParamList } from '../../navigation/types';
 import { makeStyles } from '../../theme/makeStyles';
+import { useTheme } from '../../theme/ThemeProvider';
+import type { HomeSummary } from '../finance/api';
 import { BalanceHero } from './components/BalanceHero';
 import { QuickActions, type QuickAction } from './components/QuickActions';
 import { RecentTransactions } from './components/RecentTransactions';
 import { RecommendationCard } from './components/RecommendationCard';
 import { StatCard } from './components/StatCard';
-import { balance, expenses, income, recentTransactions, recommendation } from './mock';
+import { recommendation } from './mock';
+import { useHomeData } from './useHomeData';
 
 const comingSoon = (title: string) => () => Alert.alert(title, 'Próximamente.');
 
-const ACTIONS: QuickAction[] = [
-  { id: 'add', label: 'Ingresar', icon: 'add', primary: true, onPress: comingSoon('Ingresar') },
-  { id: 'transfer', label: 'Transferir', icon: 'swap-horizontal', onPress: comingSoon('Transferir') },
-  { id: 'analyze', label: 'Analizar', icon: 'sparkles-outline', onPress: comingSoon('Analizar con IA') },
-  { id: 'more', label: 'Más', icon: 'ellipsis-horizontal', onPress: comingSoon('Más acciones') },
-];
+/** Percent change from `previous` to `current`; 0 when there is nothing to compare with. */
+function changePct(current: number, previous: number) {
+  return previous > 0 ? ((current - previous) / previous) * 100 : 0;
+}
+
+function statsFrom(s: HomeSummary) {
+  const spentShare = s.incomeMonth > 0 ? Math.min(s.expensesMonth / s.incomeMonth, 1) : 0;
+  return {
+    // Compare with the balance at the start of the month (none for a brand-new user).
+    balanceChangePct: s.balance - s.monthNet > 0 ? changePct(s.balance, s.balance - s.monthNet) : null,
+    incomeFooter:
+      s.incomePrevMonth > 0
+        ? `${formatPercent(changePct(s.incomeMonth, s.incomePrevMonth))} vs. mes anterior`
+        : 'Este mes',
+    spentShare,
+    expensesFooter:
+      s.incomeMonth > 0 ? `${Math.round((s.expensesMonth / s.incomeMonth) * 100)}% de tus ingresos` : 'Este mes',
+  };
+}
 
 export function HomeScreen() {
   const styles = useStyles();
+  const { colors } = useTheme();
   const { session } = useAuth();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const { summary, transactions, error, loading, refreshing, refresh } = useHomeData();
   const [showRecommendation, setShowRecommendation] = useState(true);
-  const spentShare = expenses.amount / expenses.limit;
+
+  const actions: QuickAction[] = [
+    { id: 'add', label: 'Ingresar', icon: 'add', primary: true, onPress: () => navigation.navigate('AddIncome') },
+    { id: 'transfer', label: 'Transferir', icon: 'swap-horizontal', onPress: () => navigation.navigate('Transfer') },
+    { id: 'analyze', label: 'Analizar', icon: 'sparkles-outline', onPress: comingSoon('Analizar con IA') },
+    { id: 'more', label: 'Más', icon: 'ellipsis-horizontal', onPress: comingSoon('Más acciones') },
+  ];
+
+  const greeting = `${greetingForHour()}, ${getFirstName(session?.user)}`;
+
+  if (!summary) {
+    return (
+      <Screen>
+        <AppText tone="secondary">{greeting}</AppText>
+        {loading ? (
+          <ActivityIndicator color={colors.textSecondary} style={styles.loader} />
+        ) : (
+          <View style={styles.error}>
+            <AppText tone="danger">{error}</AppText>
+            <Button title="Reintentar" variant="secondary" onPress={refresh} />
+          </View>
+        )}
+      </Screen>
+    );
+  }
+
+  const stats = statsFrom(summary);
 
   return (
-    <Screen>
-      <BalanceHero greeting={`${greetingForHour()}, ${getFirstName(session?.user)}`} {...balance} />
+    <Screen refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}>
+      <BalanceHero
+        greeting={greeting}
+        total={summary.balance}
+        currency="USD"
+        changePct={stats.balanceChangePct}
+        changeAmount={summary.monthNet}
+      />
 
-      <QuickActions actions={ACTIONS} />
+      <QuickActions actions={actions} />
 
       {showRecommendation && (
         <RecommendationCard
@@ -47,26 +100,28 @@ export function HomeScreen() {
 
       <View style={styles.stats}>
         <StatCard
-          label="Ingresos"
-          value={formatMoney(income.amount, { decimals: 0 })}
-          footer={`${formatPercent(income.changePct)} vs. mes anterior`}
+          label="Ingresos del mes"
+          value={formatMoney(summary.incomeMonth, { decimals: 0 })}
+          footer={stats.incomeFooter}
         >
-          <Sparkline data={income.trend} />
+          <Sparkline data={summary.incomeTrend} />
         </StatCard>
         <StatCard
           label="Gastos del mes"
-          value={formatMoney(expenses.amount, { decimals: 0 })}
-          footer={`${Math.round(spentShare * 100)}% de ${formatMoney(expenses.limit, { decimals: 0 })}`}
+          value={formatMoney(summary.expensesMonth, { decimals: 0 })}
+          footer={stats.expensesFooter}
         >
-          <ProgressBar value={spentShare} height={6} />
+          <ProgressBar value={stats.spentShare} height={6} />
         </StatCard>
       </View>
 
-      <RecentTransactions transactions={recentTransactions} />
+      <RecentTransactions transactions={transactions} onSeeAll={() => navigation.navigate('Transactions')} />
     </Screen>
   );
 }
 
 const useStyles = makeStyles(() => ({
   stats: { flexDirection: 'row', gap: 12 },
+  loader: { marginTop: 40 },
+  error: { gap: 16, alignItems: 'flex-start' },
 }));

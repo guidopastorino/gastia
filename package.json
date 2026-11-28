@@ -20,7 +20,8 @@
     "supabase:diff": "supabase db diff",
     "supabase:link": "supabase link",
     "supabase:push": "supabase db push",
-    "supabase:types": "supabase gen types typescript --local > src/lib/database.types.ts"
+    "supabase:types": "supabase gen types typescript --project-id hemsjwssawqsasobsign > src/lib/database.types.ts",
+    "lint": "expo lint"
   },
   "dependencies": {
     "@expo-google-fonts/geist": "^0.4.2",
@@ -42,6 +43,8 @@
   },
   "devDependencies": {
     "@types/react": "~19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-expo": "~58.0.4",
     "supabase": "^3.4.0",
     "typescript": "~6.0.3"
   }

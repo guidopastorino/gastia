@@ -10,4 +10,7 @@ export type AppTabsParamList = {
 export type RootStackParamList = {
   Tabs: NavigatorScreenParams<AppTabsParamList>;
   Profile: undefined;
+  Transactions: undefined;
+  AddIncome: undefined;
+  Transfer: undefined;
 };
