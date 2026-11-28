@@ -84,7 +84,17 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      account_balances: {
+        Row: {
+          balance: number | null
+          created_at: string | null
+          icon: string | null
+          id: string | null
+          name: string | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_home_summary: { Args: never; Returns: Json }

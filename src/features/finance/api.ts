@@ -5,6 +5,7 @@ export type Account = {
   id: string;
   name: string;
   icon: IconName;
+  balance: number;
 };
 
 export type TransactionKind = 'income' | 'expense' | 'transfer';
@@ -42,9 +43,17 @@ type SummaryRow = {
 };
 
 export async function fetchAccounts(): Promise<Account[]> {
-  const { data, error } = await supabase.from('accounts').select('id, name, icon').order('created_at');
+  const { data, error } = await supabase
+    .from('account_balances')
+    .select('id, name, icon, balance')
+    .order('created_at');
   if (error) throw error;
-  return data.map((a) => ({ id: a.id, name: a.name, icon: a.icon as IconName }));
+  return data.map((a) => ({
+    id: a.id ?? '',
+    name: a.name ?? '',
+    icon: (a.icon ?? 'wallet-outline') as IconName,
+    balance: Number(a.balance ?? 0),
+  }));
 }
 
 export async function fetchHomeSummary(): Promise<HomeSummary> {
