@@ -11,6 +11,7 @@
       "bundleIdentifier": "com.guidopastorino.gastia"
     },
     "android": {
+      "package": "com.guidopastorino.gastia",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
