@@ -11,7 +11,8 @@ type Props = {
   greeting: string;
   total: number;
   currency: string;
-  changePct: number;
+  /** null when there is no previous balance to compare with. */
+  changePct: number | null;
   changeAmount: number;
 };
 
@@ -19,7 +20,7 @@ export function BalanceHero({ greeting, total, currency, changePct, changeAmount
   const styles = useStyles();
   const { colors } = useTheme();
   const [hidden, setHidden] = useState(false);
-  const up = changePct >= 0;
+  const up = (changePct ?? changeAmount) >= 0;
 
   return (
     <View style={styles.container}>
@@ -45,9 +46,11 @@ export function BalanceHero({ greeting, total, currency, changePct, changeAmount
 
         <View style={styles.trendRow}>
           <Ionicons name={up ? 'arrow-up' : 'arrow-down'} size={14} color={up ? colors.success : colors.danger} />
-          <AppText variant="smallStrong" tone={up ? 'success' : 'danger'}>
-            {formatPercent(changePct, { signed: false })}
-          </AppText>
+          {changePct !== null && (
+            <AppText variant="smallStrong" tone={up ? 'success' : 'danger'}>
+              {formatPercent(Math.abs(changePct), { signed: false })}
+            </AppText>
+          )}
           <AppText variant="small" tone="secondary">
             {hidden ? 'este mes' : `${formatMoney(changeAmount, { signed: true, decimals: 0 })} este mes`}
           </AppText>

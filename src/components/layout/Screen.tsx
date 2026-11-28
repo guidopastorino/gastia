@@ -42,6 +42,8 @@ export function Screen({ children, scrollRef, contentStyle, onContentSizeChange,
       contentInsetAdjustmentBehavior="automatic"
       automaticallyAdjustKeyboardInsets
       keyboardShouldPersistTaps="handled"
+      // Number pads have no return key; dragging the content hides the keyboard.
+      keyboardDismissMode="interactive"
       onContentSizeChange={onContentSizeChange}
       refreshControl={refreshControl}
     >

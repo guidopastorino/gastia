@@ -5,6 +5,7 @@ import { AppText } from '../components/ui';
 import { AddIncomeScreen } from '../features/finance/AddIncomeScreen';
 import { TransferScreen } from '../features/finance/TransferScreen';
 import { ProfileScreen } from '../features/profile/ProfileScreen';
+import type { Colors } from '../theme/colors';
 import { useTheme } from '../theme/ThemeProvider';
 import { AppTabs } from './AppTabs';
 import { nativeHeaderOptions } from './headerOptions';
@@ -12,10 +13,18 @@ import type { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-/** Sheet for short forms (ingresar, transferir). iOS sheets have no back button, so add "Cancelar". */
-const formSheetOptions = ({ navigation }: { navigation: { goBack: () => void } }): NativeStackNavigationOptions => ({
+/**
+ * Sheet for short forms (ingresar, transferir). Solid header so content doesn't slide under it,
+ * and "Cancelar" because iOS sheets have no back button.
+ */
+const formSheetOptions = (
+  { navigation }: { navigation: { goBack: () => void } },
+  colors: Colors,
+): NativeStackNavigationOptions => ({
   presentation: 'modal',
   headerLargeTitleEnabled: false,
+  headerTransparent: false,
+  headerStyle: { backgroundColor: colors.background },
   headerLeft:
     Platform.OS === 'ios'
       ? () => (
@@ -43,12 +52,12 @@ export function RootNavigator() {
       <Stack.Screen
         name="AddIncome"
         component={AddIncomeScreen}
-        options={(props) => ({ ...formSheetOptions(props), title: 'Ingresar dinero' })}
+        options={(props) => ({ ...formSheetOptions(props, colors), title: 'Ingresar dinero' })}
       />
       <Stack.Screen
         name="Transfer"
         component={TransferScreen}
-        options={(props) => ({ ...formSheetOptions(props), title: 'Transferir' })}
+        options={(props) => ({ ...formSheetOptions(props, colors), title: 'Transferir' })}
       />
     </Stack.Navigator>
   );

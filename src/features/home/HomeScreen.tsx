@@ -31,7 +31,8 @@ function changePct(current: number, previous: number) {
 function statsFrom(s: HomeSummary) {
   const spentShare = s.incomeMonth > 0 ? Math.min(s.expensesMonth / s.incomeMonth, 1) : 0;
   return {
-    balanceChangePct: changePct(s.balance, s.balance - s.monthNet),
+    // Compare with the balance at the start of the month (none for a brand-new user).
+    balanceChangePct: s.balance - s.monthNet > 0 ? changePct(s.balance, s.balance - s.monthNet) : null,
     incomeFooter:
       s.incomePrevMonth > 0
         ? `${formatPercent(changePct(s.incomeMonth, s.incomePrevMonth))} vs. mes anterior`
