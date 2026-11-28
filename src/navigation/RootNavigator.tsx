@@ -3,6 +3,7 @@ import { Platform, Pressable } from 'react-native';
 
 import { AppText } from '../components/ui';
 import { AddIncomeScreen } from '../features/finance/AddIncomeScreen';
+import { TransferScreen } from '../features/finance/TransferScreen';
 import { ProfileScreen } from '../features/profile/ProfileScreen';
 import { useTheme } from '../theme/ThemeProvider';
 import { AppTabs } from './AppTabs';
@@ -43,6 +44,11 @@ export function RootNavigator() {
         name="AddIncome"
         component={AddIncomeScreen}
         options={(props) => ({ ...formSheetOptions(props), title: 'Ingresar dinero' })}
+      />
+      <Stack.Screen
+        name="Transfer"
+        component={TransferScreen}
+        options={(props) => ({ ...formSheetOptions(props), title: 'Transferir' })}
       />
     </Stack.Navigator>
   );
