@@ -51,7 +51,13 @@ export function TransactionsScreen() {
   const sections = useMemo(() => groupByDay(items), [items]);
 
   const filters = (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filters}>
+    // Bleeds to the screen edges so the pills scroll past the page padding instead of being cut.
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      style={styles.filtersScroll}
+      contentContainerStyle={styles.filters}
+    >
       {FILTERS.map((f) => {
         const selected = f.value === filter;
         return (
@@ -128,7 +134,8 @@ export function TransactionsScreen() {
 const useStyles = makeStyles((c) => ({
   screen: { flex: 1, backgroundColor: c.background },
   content: { paddingHorizontal: SCREEN_PADDING, paddingBottom: spacing.xxxl },
-  filters: { gap: 8, paddingTop: spacing.sm, paddingBottom: spacing.xs },
+  filtersScroll: { marginHorizontal: -SCREEN_PADDING },
+  filters: { gap: 8, paddingTop: spacing.sm, paddingBottom: spacing.xs, paddingHorizontal: SCREEN_PADDING },
   pill: {
     paddingHorizontal: 16,
     paddingVertical: 8,
