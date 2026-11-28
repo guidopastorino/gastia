@@ -4,9 +4,9 @@ import { Alert, View } from 'react-native';
 
 import appConfig from '../../../app.json';
 import { useAuth } from '../../auth/AuthProvider';
+import { signOut } from '../../auth/signOut';
 import { Screen } from '../../components/layout/Screen';
 import { AppText, ListRow, ListSection } from '../../components/ui';
-import { supabase } from '../../lib/supabase';
 import { getDisplayName } from '../../lib/user';
 import type { RootStackParamList } from '../../navigation/types';
 import { AdviceLevelRow, type AdviceLevel } from './components/AdviceLevelRow';
@@ -29,7 +29,7 @@ export function SettingsScreen() {
   function confirmSignOut() {
     Alert.alert('Cerrar sesión', '¿Seguro que quieres salir?', [
       { text: 'Cancelar', style: 'cancel' },
-      { text: 'Cerrar sesión', style: 'destructive', onPress: () => supabase.auth.signOut() },
+      { text: 'Cerrar sesión', style: 'destructive', onPress: signOut },
     ]);
   }
 
