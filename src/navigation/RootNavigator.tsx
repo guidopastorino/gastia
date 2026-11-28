@@ -5,6 +5,7 @@ import { AppText } from '../components/ui';
 import { AddIncomeScreen } from '../features/finance/AddIncomeScreen';
 import { TransferScreen } from '../features/finance/TransferScreen';
 import { ProfileScreen } from '../features/profile/ProfileScreen';
+import { TransactionsScreen } from '../features/transactions/TransactionsScreen';
 import type { Colors } from '../theme/colors';
 import { useTheme } from '../theme/ThemeProvider';
 import { AppTabs } from './AppTabs';
@@ -49,6 +50,7 @@ export function RootNavigator() {
     >
       <Stack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false }} />
       <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'Perfil' }} />
+      <Stack.Screen name="Transactions" component={TransactionsScreen} options={{ title: 'Movimientos' }} />
       <Stack.Screen
         name="AddIncome"
         component={AddIncomeScreen}

@@ -1,45 +1,24 @@
-import { Alert, View } from 'react-native';
+import { View } from 'react-native';
 
-import { AppText, Card, SectionHeader, type IconName } from '../../../components/ui';
-import { relativeDateTimeLabel } from '../../../lib/date';
+import { AppText, Card, SectionHeader } from '../../../components/ui';
 import { makeStyles } from '../../../theme/makeStyles';
-import type { Transaction } from '../../../types/finance';
-import type { TransactionKind, TransactionRecord } from '../../finance/api';
-import { TransactionRow } from './TransactionRow';
-
-const KIND: Record<TransactionKind, { icon: IconName; label: string }> = {
-  income: { icon: 'cash-outline', label: 'Ingreso' },
-  expense: { icon: 'bag-handle-outline', label: 'Gasto' },
-  transfer: { icon: 'swap-horizontal', label: 'Transferencia' },
-};
-
-function toRow(t: TransactionRecord): Transaction {
-  return {
-    id: t.id,
-    title: t.title,
-    subtitle: `${relativeDateTimeLabel(t.occurredAt)} • ${t.accountName}`,
-    amount: t.amount,
-    method: KIND[t.kind].label,
-    icon: KIND[t.kind].icon,
-  };
-}
+import type { TransactionRecord } from '../../finance/api';
+import { toTransactionRow } from '../../finance/transactionDisplay';
+import { TransactionRow } from '../../finance/components/TransactionRow';
 
 type Props = {
   transactions: TransactionRecord[];
+  onSeeAll: () => void;
 };
 
-export function RecentTransactions({ transactions }: Props) {
+export function RecentTransactions({ transactions, onSeeAll }: Props) {
   const styles = useStyles();
 
   return (
     <View style={styles.container}>
       <SectionHeader
         title="Movimientos recientes"
-        action={
-          transactions.length > 0
-            ? { label: 'Ver todo', onPress: () => Alert.alert('Movimientos', 'Próximamente.') }
-            : undefined
-        }
+        action={transactions.length > 0 ? { label: 'Ver todo', onPress: onSeeAll } : undefined}
       />
       <Card style={styles.card}>
         {transactions.length === 0 ? (
@@ -47,7 +26,7 @@ export function RecentTransactions({ transactions }: Props) {
             Todavía no tienes movimientos. Registra tu primer ingreso con “Ingresar”.
           </AppText>
         ) : (
-          transactions.map((t) => <TransactionRow key={t.id} transaction={toRow(t)} />)
+          transactions.map((t) => <TransactionRow key={t.id} transaction={toTransactionRow(t)} />)
         )}
       </Card>
     </View>

@@ -73,11 +73,28 @@ export async function fetchHomeSummary(): Promise<HomeSummary> {
 }
 
 export async function fetchRecentTransactions(limit = 5): Promise<TransactionRecord[]> {
-  const { data, error } = await supabase
+  return fetchTransactions({ offset: 0, limit });
+}
+
+/** Newest first; `kind` filters to one type of movement. */
+export async function fetchTransactions({
+  kind,
+  offset,
+  limit,
+}: {
+  kind?: TransactionKind;
+  offset: number;
+  limit: number;
+}): Promise<TransactionRecord[]> {
+  let query = supabase
     .from('transactions')
     .select('id, kind, amount, title, occurred_at, account:accounts(name)')
     .order('occurred_at', { ascending: false })
-    .limit(limit);
+    .order('id')
+    .range(offset, offset + limit - 1);
+  if (kind) query = query.eq('kind', kind);
+
+  const { data, error } = await query;
   if (error) throw error;
   return data.map((t) => ({
     id: t.id,

@@ -115,7 +115,7 @@ export function HomeScreen() {
         </StatCard>
       </View>
 
-      <RecentTransactions transactions={transactions} />
+      <RecentTransactions transactions={transactions} onSeeAll={() => navigation.navigate('Transactions')} />
     </Screen>
   );
 }
